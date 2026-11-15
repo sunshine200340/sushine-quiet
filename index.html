@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>停云 · 一页安静</title>
+<meta name="description" content="读一句旧诗，停三分钟，写下一句想放下的话。无账号、无统计、无第三方请求。">
+<meta name="theme-color" content="#f7f4ed">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="paper">
+
+  <header class="masthead">
+    <div class="brand">
+      <span class="brand-name">停云</span>
+      <span class="brand-sub">一页安静</span>
+    </div>
+    <div class="today" id="today">&nbsp;</div>
+  </header>
+
+  <main>
+
+    <section class="intro">
+      <p class="lede">不用解决什么，也不用想明白什么。</p>
+      <p class="lede-sub">这一页只做一件事 —— 让你慢一点。</p>
+    </section>
+
+    <section class="scene-block" aria-label="一扇窗与一句旧诗">
+      <div class="window">
+        <svg class="scene" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#e9ede8"/>
+              <stop offset="62%" stop-color="#f2f0e8"/>
+              <stop offset="100%" stop-color="#f7f4ed"/>
+            </linearGradient>
+            <linearGradient id="hillNear" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#8fa095"/>
+              <stop offset="100%" stop-color="#b9c3b8"/>
+            </linearGradient>
+          </defs>
+
+          <rect width="800" height="300" fill="url(#sky)"/>
+
+          <g class="cloud cloud-a" fill="#ffffff" opacity="0.50">
+            <ellipse cx="150" cy="72" rx="88" ry="13"/>
+            <ellipse cx="205" cy="64" rx="60" ry="11"/>
+          </g>
+          <g class="cloud cloud-b" fill="#ffffff" opacity="0.34">
+            <ellipse cx="470" cy="48" rx="104" ry="12"/>
+            <ellipse cx="530" cy="41" rx="62" ry="9"/>
+          </g>
+
+          <path d="M0 196 Q 90 142 178 184 T 360 172 T 545 190 T 800 158 L800 300 L0 300 Z" fill="#c6d0c6" opacity="0.62"/>
+          <path d="M0 226 Q 130 176 250 214 T 480 208 T 700 224 T 800 206 L800 300 L0 300 Z" fill="#a8b7a9" opacity="0.52"/>
+          <path d="M0 264 Q 160 232 320 258 T 620 250 T 800 262 L800 300 L0 300 Z" fill="url(#hillNear)" opacity="0.40"/>
+
+          <g class="bamboo" stroke="#40544a" fill="none" opacity="0.13" stroke-linecap="round">
+            <path d="M742 300 Q 730 190 748 96" stroke-width="5"/>
+            <path d="M748 200 Q 700 178 676 148" stroke-width="2"/>
+            <path d="M744 168 Q 786 148 800 128" stroke-width="2"/>
+            <path d="M744 236 Q 706 220 690 200" stroke-width="2"/>
+            <path d="M700 182 Q 680 170 662 172" stroke-width="1.5"/>
+            <path d="M714 190 Q 700 204 682 206" stroke-width="1.5"/>
+            <path d="M776 158 Q 792 148 800 150" stroke-width="1.5"/>
+            <path d="M770 164 Q 786 180 800 178" stroke-width="1.5"/>
+          </g>
+
+          <g stroke="#7d8479" opacity="0.10" stroke-width="1">
+            <line x1="133" y1="0" x2="133" y2="300"/>
+            <line x1="267" y1="0" x2="267" y2="300"/>
+            <line x1="400" y1="0" x2="400" y2="300"/>
+            <line x1="533" y1="0" x2="533" y2="300"/>
+            <line x1="667" y1="0" x2="667" y2="300"/>
+            <line x1="0" y1="150" x2="800" y2="150"/>
+          </g>
+        </svg>
+        <div class="window-light" aria-hidden="true"></div>
+      </div>
+
+      <blockquote class="verse">
+        <p class="verse-text" id="verseText">&nbsp;</p>
+        <p class="verse-from" id="verseFrom">&nbsp;</p>
+      </blockquote>
+      <p class="verse-note">依日期呈现的一句旧诗。不是签，也不预测什么。</p>
+    </section>
+
+    <nav class="entries" aria-label="页面内导航">
+      <a href="#breathe">停一停</a>
+      <a href="#letgo">放在这里</a>
+      <a href="#small">此刻可做的小事</a>
+    </nav>
+
+    <section id="breathe" class="block">
+      <h2>停一停</h2>
+      <p class="hint">跟着圆圈慢慢来。不舒服就随时停，按自己的节奏就好。</p>
+      <div class="breath-stage">
+        <div class="breath-ring" id="breathRing"><span id="breathWord">慢慢吸</span></div>
+      </div>
+      <div class="timer-row">
+        <button type="button" id="timerBtn" class="btn">给我三分钟</button>
+        <span id="timerText" class="timer-text" aria-live="polite"></span>
+      </div>
+      <p id="timerEnd" class="end-note" hidden>三分钟过去了。可以走了，也可以再坐一会儿。</p>
+    </section>
+
+    <section id="letgo" class="block">
+      <h2>放在这里</h2>
+      <p class="hint">写一句此刻最想放下的话。不必完整，也不必给谁看。</p>
+
+      <div id="writeBox" class="write-box">
+        <textarea id="note" rows="4" maxlength="500" placeholder="……" aria-label="写一句想放下的话"></textarea>
+        <div class="write-actions">
+          <button type="button" id="letGoBtn" class="btn" disabled>放在这里</button>
+        </div>
+      </div>
+
+      <div id="released" class="released" hidden>
+        <div class="ink" aria-hidden="true"></div>
+        <p>放下了。这里没有留底。</p>
+        <button type="button" id="againBtn" class="btn btn-quiet">再写一次</button>
+      </div>
+
+      <p class="privacy">
+        <strong>关于你写下的字</strong><br>
+        它只在这一个页面的内存里。不会上传、不会被保存、不经过任何服务器；刷新或关掉，就没有了。本页不使用账号、Cookie 或任何统计，服务端也已禁止本页发起网络请求。
+      </p>
+    </section>
+
+    <section id="small" class="block">
+      <h2>此刻可做的小事</h2>
+      <p class="hint">只是几件可以试试的事，不是建议，也不保证什么。</p>
+      <ul id="smallList" class="small-list"></ul>
+    </section>
+
+    <section class="help">
+      <h2>如果不想一个人待着</h2>
+      <p>这一页帮不上真正难的那些时刻。下面的号码，那头有人守着。</p>
+      <ul class="hotlines">
+        <li><span class="hot-num">12356</span><span class="hot-desc">全国统一心理援助热线 · 24 小时 · 免费</span></li>
+        <li><span class="hot-num">12355</span><span class="hot-desc">青少年服务台</span></li>
+        <li><span class="hot-num">12338</span><span class="hot-desc">妇女维权公益热线</span></li>
+      </ul>
+      <p class="help-note">本站不提供心理咨询、心理治疗或任何医疗建议。若困扰持续，请联系专业人士或就近就医。</p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <details class="about">
+      <summary>关于这一页，以及它的边界</summary>
+      <div class="about-body">
+        <p><strong>这里是什么</strong><br>
+        一个纯静态的中文页面：几句公有领域的旧诗、一个三分钟计时、几件可以不做的小事。属于个人非经营性展示，不收费、不募捐、不售卖任何东西。</p>
+
+        <p><strong>这里不是什么</strong></p>
+        <ul>
+          <li>不是宗教场所，也不是宗教团体，不提供任何互联网宗教信息服务。页面不含教义教规、宗教知识、宗教活动或仪式，不设祈愿、抽签、占卜、命理、宜忌，也不以任何名义募捐或收费。依据《互联网宗教信息服务管理办法》第十五至十九条、《宗教事务条例》第四十七条。</li>
+          <li>不是医疗机构，也不是心理咨询机构，不提供诊断、治疗或咨询，不宣称缓解、改善任何疾病与症状。依据《中华人民共和国精神卫生法》。</li>
+          <li>不做运势、签文、算命与黄历宜忌。那句旧诗依日期呈现，只是文字。</li>
+        </ul>
+
+        <p><strong>关于你的信息</strong><br>
+        没有账号、没有表单提交、没有评论、没有上传、没有 Cookie、没有第三方统计、没有广告，也不加载任何外部资源。书写内容只存在于当前页面内存；服务端同时设置了 CSP，禁止本页发起任何网络请求。遵循《中华人民共和国个人信息保护法》的最小必要原则。</p>
+
+        <p><strong>内容与版权</strong><br>
+        所引诗文均出自公有领域古籍并注明出处；页面代码与版式为原创。</p>
+
+        <p><strong>备案</strong><br>
+        本站托管于境外 CDN。若后续面向中国大陆公众长期提供互联网信息服务，应按规定办理 ICP 备案。</p>
+      </div>
+    </details>
+
+    <p class="foot-line">
+      <a href="https://sushine.xyz">回到老杨的主页</a>
+      <span class="dot">·</span>
+      <span>纯静态 · 无账号 · 无统计 · 无广告 · 无第三方请求</span>
+    </p>
+  </footer>
+
+</div>
+<script src="quiet.js" defer></script>
+</body>
+</html>
