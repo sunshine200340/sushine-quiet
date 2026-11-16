@@ -118,7 +118,7 @@ html[lang="en"] .i18n-unit { display: none; }
   position: relative;
   min-height: clamp(300px, 29vw, 410px);
   display: flex; align-items: flex-start;
-  background: #2c5266 url("assets/hero-lake.jpg") center 52% / cover no-repeat;
+  background: #2c5266 url("hero-lake.jpg") center 52% / cover no-repeat;
 }
 .hero-media::before {
   content: ""; position: absolute; inset: 0; pointer-events: none;
