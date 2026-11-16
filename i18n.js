@@ -6,10 +6,30 @@
 
   /* 中文原文 => English。key 与页面中的中文文本逐字对应。 */
   var DICT = {
+    /* 页面头部 */
+    "向阳而生 · 慢慢变好 | sushine.xyz": "Sunward · Grow Better Slowly | sushine.xyz",
+    "给焦虑、迷茫、疲惫的成年人留的一个泄压阀。进站即有雨声与柔和背景音，看看空境、听听声音风景、做 60 秒呼吸、写一句想放下的话。无账号、无统计、无第三方请求。": "A pressure valve for anxious, lost, and tired adults. Rain and soft ambient music play on arrival; watch the quiet scene, explore soundscapes, breathe for 60 seconds, or write a line and let it go. No account, no analytics, no third-party requests.",
+    "心里有光，慢慢来。这里不用解决什么，先喘口气。": "Light in your heart, take it easy. You don't have to fix anything here — just breathe.",
     /* 品牌 / 导航 */
     "别慌，慢慢来 · 一个不用慌的角落": "No Rush, Take It Easy · A Quiet Corner",
     "别慌": "No Rush",
+    "向阳而生": "Sunward",
+    "向阳而生，慢慢变好。": "Grow toward the light, one day at a time.",
+    "向阳而生，": "Grow toward the light, ",
+    "慢慢变好。": "one day at a time.",
+    "别慌，慢慢来。你不是一个人着急。": "No rush, take it easy. You're not the only one feeling this.",
+    "sushine.xyz · 一个能喘口气的角落": "sushine.xyz · a corner to catch your breath",
+    "向阳而生 · 别慌，慢慢来": "Sunward · No rush, take it easy",
     "一个不用慌的角落": "A corner to catch your breath",
+    /* 四种轻体验入口 */
+    "现在就试试": "Try one now",
+    "60 秒放空": "60-second reset",
+    "跟一次呼吸，回到眼前": "One breath, back to the present",
+    "听会儿雨": "Listen to rain",
+    "进站已在响，随时可关": "Playing on arrival, easy to mute",
+    "一图一声，点开就听": "One image, one sound — tap to listen",
+    "写一句放下": "Write it down, let it go",
+    "即焚，不留底": "Gone in a moment, kept nowhere",
     "少点慌": "Worry less",
     "睡得着": "Sleep better",
     "慢慢活": "Live slowly",
@@ -57,6 +77,7 @@
     "轻点开启雨声与背景音": "Tap to turn on rain & ambient",
     /* 声音风景 */
     "声音风景 · 点一张，听听那里的声音。": "Soundscapes · Pick one and listen.",
+    "声音风景": "Soundscapes",
     "山林": "Forest",
     "湖畔": "Lakeside",
     "雨夜": "Rainy night",

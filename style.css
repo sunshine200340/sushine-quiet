@@ -10,6 +10,7 @@
   --green-soft: #e7f3f6;
   --ochre: #cf8a5b;
   --ochre-soft: #fbf0e7;
+  --title-navy: #1e3f70;
   --serif: "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", "Source Han Serif SC", Georgia, serif;
   --sans: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", system-ui, sans-serif;
 }
@@ -119,7 +120,7 @@ html[lang="en"] .i18n-unit { display: none; }
   font-family: var(--sans); font-size: 12px; letter-spacing: 0.3em; color: var(--green-deep);
   border: 1px solid var(--green); border-radius: 999px; background: var(--green-soft);
 }
-.hero-title { margin: 0; font-size: 46px; font-weight: 400; letter-spacing: 0.06em; line-height: 1.4; color: var(--ink); }
+.hero-title { margin: 0; font-size: 48px; font-weight: 600; letter-spacing: 0.04em; line-height: 1.35; color: var(--title-navy); }
 .hero-title em { font-style: normal; color: var(--green-deep); }
 .hero-line { margin: 20px 0 0; font-size: 20px; letter-spacing: 0.08em; color: var(--ink-soft); }
 .hero-sub { margin: 14px 0 0; font-size: 15px; line-height: 2; letter-spacing: 0.05em; color: var(--ink-faint); }
@@ -176,6 +177,23 @@ html[lang="en"] .i18n-unit { display: none; }
   box-shadow: 0 -8px 34px rgba(24,67,88,0.10);
 }
 .hero-body .hero-kicker { background: var(--green-soft); border-color: var(--green-soft); color: var(--green-deep); }
+
+/* ---------- 四种轻体验入口 ---------- */
+.quick-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  max-width: 920px; margin: 18px auto 0;
+}
+.quick-card {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center;
+  padding: 18px 12px 20px; background: rgba(255,255,255,0.82);
+  border: 1px solid var(--line); border-radius: 10px;
+  box-shadow: 0 12px 30px -24px rgba(24,67,88,0.4);
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.quick-card:hover { transform: translateY(-3px); border-color: var(--green); box-shadow: 0 16px 32px -24px rgba(34,99,124,0.6); color: var(--green-deep); }
+.quick-ico { font-size: 22px; line-height: 1; color: var(--green); }
+.quick-card strong { font-size: 15px; font-weight: 400; letter-spacing: 0.08em; color: var(--title-navy); }
+.quick-card small { font-family: var(--sans); font-size: 11px; line-height: 1.7; letter-spacing: 0.02em; color: var(--ink-faint); }
 
 .btn-strong { background: var(--green); border-color: var(--green); color: #fff; }
 .btn-strong:hover:not(:disabled) { background: var(--green-deep); border-color: var(--green-deep); color: #fff; }
@@ -503,6 +521,7 @@ html[lang="en"] .i18n-unit { display: none; }
   .hero-media { min-height: 300px; background-position: center 48%; }
   .hero-body { margin: -18px 12px 0; padding: 34px 20px 30px; }
   .scape-grid { grid-template-columns: repeat(3, 1fr); }
+  .quick-grid { grid-template-columns: repeat(2, 1fr); }
   .needs-nav { grid-template-columns: 1fr; }
   .need-cards { grid-template-columns: 1fr; }
   .number-grid { grid-template-columns: repeat(2, 1fr); }
