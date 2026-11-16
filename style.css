@@ -179,8 +179,10 @@ html[lang="en"] .i18n-unit { display: none; }
   position: relative; z-index: 1;
   max-width: 920px; margin: -28px auto 0;
   padding: 46px 32px 42px;
-  background: #fff; border-radius: 16px 16px 0 0;
-  box-shadow: 0 -8px 34px rgba(24,67,88,0.10);
+  background: linear-gradient(165deg, #f4f8f0 0%, #eaf2e7 100%);
+  border: 1px solid var(--line); border-bottom: 0;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -8px 34px rgba(24,67,88,0.08);
 }
 .hero-body .hero-kicker { background: var(--green-soft); border-color: var(--green-soft); color: var(--green-deep); }
 
