@@ -128,23 +128,127 @@
     return lfo;
   }
 
+  /* ---------- 鸟叫引擎 ----------
+     旧版是一声单音、音量 0.032，听起来像远处的电子提示音。
+     现在改成"音节串 + 多物种 + 轻微左右分布"：鸟叫要有停顿、有高低、有远近，
+     才会被听成"林子里有鸟"，而不是"音箱在响"。
+     birdLevel 由页面上的"鸟叫浓度"滑块实时改写（1 = 旧版音量）。 */
+  var birdLevel = 1.75;
+  var SPECIES = {
+    sparrow:  { gain: 1.00, pan: 0.34 },   /* 麻雀：短促密集、位置偏右 */
+    bulbul:   { gain: 0.95, pan: -0.28 },  /* 白头翁：几声圆润的哨音 */
+    thrush:   { gain: 0.92, pan: 0.12 },   /* 画眉：一串带颤音的连唱 */
+    cuckoo:   { gain: 0.85, pan: -0.46 },  /* 布谷：两声低沉，听感偏远 */
+    woodpeck: { gain: 0.60, pan: 0.48 }    /* 啄木鸟：一串木质敲击 */
+  };
+
+  function birdNote(ac, bus, o) {
+    var t = ac.currentTime + (o.delay || 0);
+    var osc = ac.createOscillator(), g = ac.createGain();
+    osc.type = o.type || 'sine';
+    osc.frequency.setValueAtTime(o.f0, t);
+    if (o.f1) osc.frequency.exponentialRampToValueAtTime(Math.max(90, o.f1), t + o.dur);
+    if (o.vib) {
+      var vl = ac.createOscillator(); vl.frequency.value = o.vib;
+      var va = ac.createGain(); va.gain.value = o.vibDepth || 70;
+      vl.connect(va); va.connect(osc.frequency); vl.start(t); vl.stop(t + o.dur + 0.06);
+    }
+    var peak = Math.max(0.0004, (o.gain || 0.03) * birdLevel);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + Math.min(0.018, o.dur * 0.3));
+    g.gain.exponentialRampToValueAtTime(0.0001, t + o.dur);
+    var pan = ac.createStereoPanner ? ac.createStereoPanner() : null;
+    if (pan) { pan.pan.value = o.pan || 0; osc.connect(g); g.connect(pan); pan.connect(bus); }
+    else { osc.connect(g); g.connect(bus); }
+    osc.start(t); osc.stop(t + o.dur + 0.08);
+  }
+
+  function woodKnock(ac, bus, delay, pan) {
+    var t = ac.currentTime + delay;
+    var src = ac.createBufferSource(); src.buffer = getNoise(ac);
+    var bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 2100; bp.Q.value = 3.2;
+    var g = ac.createGain();
+    var peak = Math.max(0.0004, 0.05 * birdLevel);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+    var p = ac.createStereoPanner ? ac.createStereoPanner() : null;
+    src.connect(bp); bp.connect(g);
+    if (p) { p.pan.value = pan || 0; g.connect(p); p.connect(bus); } else g.connect(bus);
+    src.start(t); src.stop(t + 0.08);
+  }
+
+  /* 一次"鸣唱"= 一个物种的一小段句子 */
+  function birdPhrase(ac, out, force) {
+    var pool = ['sparrow', 'bulbul', 'thrush', 'cuckoo', 'woodpeck'];
+    var sp = force || pool[Math.floor(Math.random() * pool.length)];
+    var s = SPECIES[sp] || SPECIES.sparrow;
+    var pan = s.pan + (Math.random() - 0.5) * 0.25;
+    var i, n, d;
+
+    if (sp === 'sparrow') {
+      n = 4 + Math.floor(Math.random() * 4);
+      for (i = 0; i < n; i++) {
+        birdNote(ac, out, {
+          delay: i * (0.062 + Math.random() * 0.03), f0: 3150 + Math.random() * 950,
+          f1: 2250 + Math.random() * 700, dur: 0.052, gain: 0.034 * s.gain, pan: pan
+        });
+      }
+    } else if (sp === 'bulbul') {
+      n = 3 + Math.floor(Math.random() * 3);
+      for (i = 0; i < n; i++) {
+        d = i * (0.2 + Math.random() * 0.1);
+        birdNote(ac, out, {
+          delay: d, f0: 1900 + Math.random() * 500, f1: 2700 + Math.random() * 600,
+          dur: 0.13 + Math.random() * 0.05, gain: 0.036 * s.gain, pan: pan
+        });
+      }
+    } else if (sp === 'thrush') {
+      n = 8 + Math.floor(Math.random() * 7);
+      for (i = 0; i < n; i++) {
+        d = i * (0.085 + Math.random() * 0.035);
+        var up = Math.random() > 0.45;
+        birdNote(ac, out, {
+          delay: d, f0: (up ? 1700 : 3000) + Math.random() * 300,
+          f1: (up ? 2950 : 1650) + Math.random() * 350,
+          dur: 0.1 + Math.random() * 0.06, gain: 0.030 * s.gain, pan: pan,
+          vib: 9 + Math.random() * 5, vibDepth: 90
+        });
+      }
+    } else if (sp === 'cuckoo') {
+      for (i = 0; i < 2; i++) {
+        birdNote(ac, out, {
+          delay: i * 0.34, type: 'triangle', f0: i ? 560 : 700, f1: i ? 520 : 660,
+          dur: 0.2, gain: 0.032 * s.gain, pan: pan
+        });
+      }
+    } else {
+      n = 7 + Math.floor(Math.random() * 6);
+      for (i = 0; i < n; i++) woodKnock(ac, out, i * (0.052 + Math.random() * 0.012), pan);
+    }
+  }
+
   var SOUNDS = {
     rain: {
       name: '细雨', icon: '☂',
       build: function (ac, out) {
-        var v = noiseVoice(ac, out, { type: 'lowpass', freq: 620, q: 0.4, gain: 0.048 });
+        var v = noiseVoice(ac, out, { type: 'lowpass', freq: 620, q: 0.4, gain: 0.046 });
         var lfo = modulate(ac, v.gain.gain, 0.045, 0.010); /* 雨势极缓起伏 */
-        return { sources: [v.src], lfos: [lfo] };
+        /* 雨里偶尔有一两声鸟：默认进场就听得到，不用切到"森林" */
+        var timer = window.setInterval(function () {
+          if (ambient && ambient.key === 'rain' && Math.random() < 0.75) birdPhrase(ac, out);
+        }, 7200);
+        return { sources: [v.src], lfos: [lfo], timer: timer };
       }
     },
     forest: {
       name: '森林', icon: '❧',
       build: function (ac, out) {
-        var v = noiseVoice(ac, out, { type: 'bandpass', freq: 900, q: 0.55, gain: 0.040 });
+        var v = noiseVoice(ac, out, { type: 'bandpass', freq: 900, q: 0.55, gain: 0.036 });
         var lfo = modulate(ac, v.filter.frequency, 0.06, 320); /* 风穿过树叶 */
         var timer = window.setInterval(function () {
-          if (ambient && ambient.key === 'forest') scapeEvent(ac, 'bird', out);
-        }, 4600);
+          if (ambient && ambient.key === 'forest') birdPhrase(ac, out);
+        }, 3000);
         return { sources: [v.src], lfos: [lfo], timer: timer };
       }
     },
@@ -156,7 +260,10 @@
         var timer = window.setInterval(function () {
           if (ambient && ambient.key === 'stream') scapeEvent(ac, 'drop', out);
         }, 3400);
-        return { sources: [v.src], lfos: [lfo], timer: timer };
+        var btimer = window.setInterval(function () {
+          if (ambient && ambient.key === 'stream' && Math.random() < 0.6) birdPhrase(ac, out);
+        }, 8800);
+        return { sources: [v.src], lfos: [lfo], timer: timer, timers: [btimer] };
       }
     },
     waves: {
@@ -174,6 +281,79 @@
         var lfo = modulate(ac, v.gain.gain, 3.2, 0.011); /* 虫鸣轻颤，音量极低 */
         return { sources: [v.src], lfos: [lfo] };
       }
+    },
+
+    /* —— 新增：以鸟为主的林间声 —— */
+    birds: {
+      name: '林鸟', icon: '❦',
+      build: function (ac, out) {
+        var v = noiseVoice(ac, out, { type: 'bandpass', freq: 760, q: 0.6, gain: 0.024 });
+        var lfo = modulate(ac, v.filter.frequency, 0.05, 220);
+        var timer = window.setInterval(function () {
+          if (ambient && ambient.key === 'birds') birdPhrase(ac, out);
+        }, 1500);
+        return { sources: [v.src], lfos: [lfo], timer: timer };
+      }
+    },
+
+    /* —— 新增：夏夜蛙鸣（虫声打底 + 低频蛙鼓）—— */
+    frogs: {
+      name: '夏夜', icon: '☾',
+      build: function (ac, out) {
+        var v = noiseVoice(ac, out, { type: 'bandpass', freq: 1100, q: 0.8, gain: 0.016 });
+        var lfo = modulate(ac, v.gain.gain, 0.07, 0.006);
+        var t1 = window.setInterval(function () {
+          if (!ambient || ambient.key !== 'frogs') return;
+          for (var i = 0; i < 3; i++) {
+            birdNote(ac, out, { delay: i * 0.055, f0: 4300 + Math.random() * 260, dur: 0.012, gain: 0.010, pan: (Math.random() - 0.5) });
+          }
+        }, 950);
+        var t2 = window.setInterval(function () {
+          if (!ambient || ambient.key !== 'frogs') return;
+          var base = 175 + Math.random() * 60;
+          for (var i = 0; i < 3; i++) {
+            birdNote(ac, out, { delay: i * 0.13, type: 'triangle', f0: base, f1: base * 0.82, dur: 0.09, gain: 0.028, pan: (Math.random() - 0.5) * 0.8 });
+          }
+        }, 2700);
+        return { sources: [v.src], lfos: [lfo], timers: [t1, t2] };
+      }
+    },
+
+    /* —— 新增：屋檐雨（雨声 + 瓦上滴水）—— */
+    roofrain: {
+      name: '屋檐雨', icon: '☔',
+      build: function (ac, out) {
+        var v = noiseVoice(ac, out, { type: 'lowpass', freq: 820, q: 0.45, gain: 0.050 });
+        var lfo = modulate(ac, v.gain.gain, 0.06, 0.012);
+        var timer = window.setInterval(function () {
+          if (ambient && ambient.key === 'roofrain') scapeEvent(ac, 'drop', out);
+        }, 780);
+        return { sources: [v.src], lfos: [lfo], timer: timer };
+      }
+    },
+
+    /* —— 新增：远雷（低沉滚动，隔一会儿来一次）—— */
+    thunder: {
+      name: '远雷', icon: '⛈',
+      build: function (ac, out) {
+        var v = noiseVoice(ac, out, { type: 'lowpass', freq: 240, q: 0.5, gain: 0.024 });
+        var lfo = modulate(ac, v.gain.gain, 0.04, 0.008);
+        function rumble() {
+          if (!ambient || ambient.key !== 'thunder') return;
+          var t = ac.currentTime;
+          var src = ac.createBufferSource(); src.buffer = getNoise(ac); src.loop = true;
+          var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.setValueAtTime(260, t);
+          lp.frequency.linearRampToValueAtTime(90, t + 3.4);
+          var g = ac.createGain();
+          g.gain.setValueAtTime(0.0001, t);
+          g.gain.linearRampToValueAtTime(0.085, t + 0.5);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + 4.2);
+          src.connect(lp); lp.connect(g); g.connect(out); src.start(t); src.stop(t + 4.4);
+        }
+        var timer = window.setInterval(rumble, 17000);
+        window.setTimeout(rumble, 2600);
+        return { sources: [v.src], lfos: [lfo], timer: timer };
+      }
     }
   };
 
@@ -188,10 +368,55 @@
   var ambient = null;
   var currentSound = 'rain';
 
+  /* ---------- 实地录音（tree.fm 收录的森林录音 · 本地 80 秒无缝循环） ----------
+     合成声能做到"像"，但鸟叫的密度和随机性，只有录音是真的。
+     两条链路共用一个开关：切到实录时合成声淡出、录音淡入，反之亦然。 */
+  var RECORDINGS = {
+    rec_birds:   { name: '实录·鸟鸣林', file: 'forest-birds.mp3',   vol: 0.92 },
+    rec_dawn:    { name: '实录·晨雾林', file: 'forest-dawn.mp3',    vol: 1.00 },
+    rec_wetland: { name: '实录·水岸鸟语', file: 'forest-wetland.mp3', vol: 0.95 }
+  };
+  var recEl = null, recTimer = null;
+
+  function stopRecording() {
+    if (!recEl) return;
+    var el = recEl; recEl = null;
+    if (recTimer) { window.clearInterval(recTimer); recTimer = null; }
+    var steps = 22, i = 0, from = el.volume;
+    recTimer = window.setInterval(function () {
+      i++;
+      try { el.volume = Math.max(0, from * (1 - i / steps)); } catch (e) {}
+      if (i >= steps) {
+        window.clearInterval(recTimer); recTimer = null;
+        try { el.pause(); el.removeAttribute('src'); el.load(); } catch (e) {}
+      }
+    }, 50);
+  }
+
+  function playRecording(key) {
+    var cfg = RECORDINGS[key]; if (!cfg) return false;
+    stopAmbient(); stopRecording();
+    var el;
+    try { el = new Audio(cfg.file); } catch (e) { return false; }
+    el.loop = true; el.preload = 'auto'; el.volume = 0;
+    recEl = el;
+    var p = el.play();
+    if (p && p.catch) p.catch(function () {});
+    var steps = 30, i = 0;
+    recTimer = window.setInterval(function () {
+      i++;
+      try { el.volume = Math.min(cfg.vol, cfg.vol * (i / steps)); } catch (e) {}
+      if (i >= steps) { window.clearInterval(recTimer); recTimer = null; }
+    }, 50);
+    currentSound = key;
+    return true;
+  }
+
   function stopAmbient() {
     if (!ambient || !audioCtx) return;
     var a = ambient; ambient = null;
     window.clearInterval(a.timer);
+    (a.timers || []).forEach(function (x) { window.clearInterval(x); });
     try {
       var t = audioCtx.currentTime;
       a.out.gain.cancelScheduledValues(t);
@@ -204,16 +429,19 @@
       try { a.out.disconnect(); } catch (e) {}
     }, 950);
   }
+
   function playAmbient(key) {
+    if (RECORDINGS[key]) return playRecording(key);
     var ac = ctx(); if (!ac) return false;
     var cfg = SOUNDS[key] || SOUNDS.rain;
-    stopAmbient();
+    stopAmbient(); stopRecording();
     var out = ac.createGain(); out.gain.value = 0; out.connect(master(ac));
     var built = cfg.build(ac, out);
     out.gain.linearRampToValueAtTime(1, ac.currentTime + 1.4);
     ambient = {
       key: key, out: out,
-      sources: built.sources || [], lfos: built.lfos || [], timer: built.timer || null
+      sources: built.sources || [], lfos: built.lfos || [],
+      timer: built.timer || null, timers: built.timers || []
     };
     currentSound = key;
     return true;
@@ -225,7 +453,7 @@
   var ambientBtn = $('ambientBtn');
   var soundHint = $('soundHint');
   function syncSoundUI() {
-    var on = !!ambient;
+    var on = !!ambient || !!recEl;
     if (ambientBtn) ambientBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
     if (soundBtn) {
       soundBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
@@ -243,10 +471,12 @@
     if (soundHint) soundHint.hidden = true;
   }
   function startAllSounds() {
-    playAmbient(currentSound); syncSoundUI(); detachGesture();
+    if (RECORDINGS[currentSound]) playRecording(currentSound);
+    else playAmbient(currentSound);
+    syncSoundUI(); detachGesture();
   }
   function stopAllSounds() {
-    stopAmbient(); syncSoundUI();
+    stopAmbient(); stopRecording(); syncSoundUI();
   }
   function onFirstGesture(e) {
     var t = e.target;
@@ -273,10 +503,29 @@
   Array.prototype.forEach.call(document.querySelectorAll('.nature-btn'), function (btn) {
     btn.addEventListener('click', function () {
       var key = btn.getAttribute('data-sound');
-      if (!SOUNDS[key]) return;
+      if (!SOUNDS[key] && !RECORDINGS[key]) return;
       playAmbient(key); syncSoundUI(); detachGesture();
     });
   });
+
+  /* 鸟叫浓度：只影响合成声里的鸟，实录以录音原声为准 */
+  var birdSlider = $('birdLevel'), birdOut = $('birdLevelOut');
+  function birdLabel(v) {
+    if (v <= 0.05) return T('关');
+    if (v < 0.95) return T('轻');
+    if (v < 1.65) return T('适中');
+    return T('浓');
+  }
+  if (birdSlider) {
+    var bv = parseFloat(birdSlider.value);
+    if (!isNaN(bv)) birdLevel = bv;
+    if (birdOut) birdOut.textContent = birdLabel(birdLevel);
+    birdSlider.addEventListener('input', function () {
+      var v = parseFloat(birdSlider.value) || 0;
+      birdLevel = v;
+      if (birdOut) birdOut.textContent = birdLabel(v);
+    });
+  }
 
   (function attemptAutoSound() {
     var ac = ctx(); if (!ac) return;
@@ -312,14 +561,7 @@
   function scapeEvent(ac, kind, bus) {
     var t = ac.currentTime;
     if (kind === 'bird') {
-      var o = ac.createOscillator(); var g = ac.createGain();
-      var base = 1100 + Math.random() * 650;
-      o.type = 'sine'; o.frequency.setValueAtTime(base, t);
-      o.frequency.exponentialRampToValueAtTime(base * 1.35, t + 0.12);
-      g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(0.032, t + 0.03);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.32);
-      o.connect(g); g.connect(bus); o.start(t); o.stop(t + 0.36);
+      birdPhrase(ac, bus);
     } else if (kind === 'drop') {
       var o2 = ac.createOscillator(); var g2 = ac.createGain();
       var f = 620 + Math.random() * 260;

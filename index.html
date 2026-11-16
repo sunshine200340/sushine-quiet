@@ -18,7 +18,7 @@
 <meta name="twitter:description" content="一个不用注册就能喘口气的地方。进站就有大自然的声音，听听声音风景，慢慢变好。">
 <meta name="twitter:image" content="https://www.sushine.xyz/og-share.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237f9c86'/%3E%3Ctext x='32' y='44' font-size='30' font-family='serif' text-anchor='middle' fill='%23fff'%3E%E6%85%A2%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=20261116i">
+<link rel="stylesheet" href="style.css?v=20261116j">
 </head>
 <body>
 <div class="paper paper--home">
@@ -104,7 +104,7 @@
       </div>
       <div class="need-cards">
         <a class="need-card" href="#scene"><strong>看看空境</strong><span>白天 / 黄昏 / 夜里，慢慢看</span></a>
-        <a class="need-card" href="#scene"><strong>听会儿雨声</strong><span>浏览器当场合成，不加载音频</span></a>
+        <a class="need-card" href="#scene"><strong>听会儿雨声</strong><span>浏览器当场合成，无需下载</span></a>
         <a class="need-card" href="#breathe"><strong>三分钟呼吸</strong><span>不用坚持，随时能停</span></a>
       </div>
     </section>
@@ -229,8 +229,21 @@
         <button type="button" class="nature-btn" data-sound="stream"><span class="nature-ico" aria-hidden="true">≈</span>溪流</button>
         <button type="button" class="nature-btn" data-sound="waves"><span class="nature-ico" aria-hidden="true">〜</span>海浪</button>
         <button type="button" class="nature-btn" data-sound="night"><span class="nature-ico" aria-hidden="true">✦</span>夜虫</button>
+        <button type="button" class="nature-btn" data-sound="birds"><span class="nature-ico" aria-hidden="true">❦</span>林鸟</button>
+        <button type="button" class="nature-btn" data-sound="frogs"><span class="nature-ico" aria-hidden="true">☾</span>夏夜</button>
+        <button type="button" class="nature-btn" data-sound="roofrain"><span class="nature-ico" aria-hidden="true">☔</span>屋檐雨</button>
+        <button type="button" class="nature-btn" data-sound="thunder"><span class="nature-ico" aria-hidden="true">⛈</span>远雷</button>
+        <span class="nature-break" aria-hidden="true"></span>
+        <button type="button" class="nature-btn is-live" data-sound="rec_birds"><span class="nature-ico" aria-hidden="true">◉</span><span class="rec-tag">实录·</span>鸟鸣林</button>
+        <button type="button" class="nature-btn is-live" data-sound="rec_dawn"><span class="nature-ico" aria-hidden="true">◉</span><span class="rec-tag">实录·</span>晨雾林</button>
+        <button type="button" class="nature-btn is-live" data-sound="rec_wetland"><span class="nature-ico" aria-hidden="true">◉</span><span class="rec-tag">实录·</span>水岸鸟语</button>
       </div>
-      <p class="quiet-note">大自然的声音是当场用浏览器合成的，不加载音频文件，也不联网。</p>
+      <div class="bird-level">
+        <label for="birdLevel">鸟叫浓度</label>
+        <input type="range" id="birdLevel" min="0" max="2.5" step="0.25" value="1.75">
+        <output id="birdLevelOut" for="birdLevel">浓</output>
+      </div>
+      <p class="quiet-note">自然声以浏览器现场合成为主，不联网；三项「实录」为 tree.fm 收录的森林实地录音（本地 80 秒循环）。</p>
 
       <div class="scape-gallery" id="scapeGallery" aria-label="声音风景">
         <p class="scape-intro">声音风景 · 点一张，听听那里的声音。</p>
@@ -435,7 +448,7 @@
         </details>
         <details>
           <summary>真的没有统计和 Cookie 吗？</summary>
-          <div class="faq-a">没有账号、没有表单提交、没有评论、没有上传、没有 Cookie、没有第三方统计。游戏互动与书写只存在于当前页面内存；声音由浏览器当场合成，不加载任何音频文件。服务端设置了 CSP，禁止本页主动发起网络请求。页面中的外部链接需要你主动点击才会打开。</div>
+          <div class="faq-a">没有账号、没有表单提交、没有评论、没有上传、没有 Cookie、没有第三方统计。游戏互动与书写只存在于当前页面内存；声音以浏览器当场合成为主，另有三段本地实录音频，均不存在第三方请求。服务端设置了 CSP，禁止本页主动发起网络请求。页面中的外部链接需要你主动点击才会打开。</div>
         </details>
       </div>
 
@@ -452,18 +465,6 @@
         <details>
           <summary>会给我算命、抽签、看运势吗？</summary>
           <div class="faq-a">不会。不做运势、签文、算命与黄历宜忌。当天那句旧诗若出现，也只是依日期呈现的文字，不预测什么。</div>
-        </details>
-      </div>
-
-      <div class="faq-group">
-        <h3>关于版权与备案</h3>
-        <details>
-          <summary>诗文和画面有版权吗？</summary>
-          <div class="faq-a">所引诗文均出自公有领域古籍并注明出处；其余文案、画面、图形与代码为原创。</div>
-        </details>
-        <details>
-          <summary>备案情况如何？</summary>
-          <div class="faq-a">本站托管于境外 CDN。若后续面向中国大陆公众长期提供互联网信息服务或开展经营性活动，应按规定办理 ICP 备案及相关许可。</div>
         </details>
       </div>
     </section>
@@ -495,7 +496,7 @@
   </div>
 </div>
 
-<script src="i18n.js?v=20261116i" defer></script>
-<script src="quiet.js?v=20261116i" defer></script>
+<script src="i18n.js?v=20261116j" defer></script>
+<script src="quiet.js?v=20261116j" defer></script>
 </body>
 </html>

@@ -274,18 +274,46 @@ html[lang="en"] .i18n-unit { display: none; }
 .quiet-note { margin: 14px 0 0; font-family: var(--sans); font-size: 12px; color: var(--ink-faint); text-align: center; }
 
 /* ---------- 大自然声景切换器：细雨 / 森林 / 溪流 / 海浪 / 夜虫 ---------- */
-.nature-switch { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 18px 0 0; }
+.nature-switch { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; margin: 18px 0 0; }
 .nature-btn {
   font-family: var(--serif); font-size: 14px; letter-spacing: 0.08em;
   color: var(--ink-soft); background: rgba(255,255,255,0.46);
   border: 1px solid var(--line); border-radius: 999px;
-  padding: 7px 17px; cursor: pointer;
+  padding: 7px 14px; cursor: pointer;
   transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 .nature-btn:hover { color: var(--green-deep); border-color: var(--green); background: rgba(255,255,255,0.8); transform: translateY(-2px); }
 .nature-btn.is-active { color: #fff; background: var(--green-deep); border-color: var(--green-deep); }
 .nature-btn .nature-ico { font-family: var(--sans); margin-right: 5px; opacity: 0.9; }
-html[lang="en"] .nature-btn { letter-spacing: 0.02em; font-size: 13px; }
+html[lang="en"] .nature-btn { letter-spacing: 0.01em; font-size: 12.5px; padding: 7px 12px; }
+
+/* 实录音源：虚线描边，和合成声区分开 */
+.nature-btn.is-live { border-style: dashed; }
+.nature-btn.is-live.is-active { border-style: solid; }
+.nature-break { flex-basis: 100%; height: 0; }
+
+/* 鸟叫浓度 */
+.bird-level {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  margin: 14px auto 0; max-width: 340px;
+  font-family: var(--sans); font-size: 12px; letter-spacing: 0.08em; color: var(--ink-soft);
+}
+.bird-level label { white-space: nowrap; }
+.bird-level input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 148px; height: 2px; border-radius: 2px;
+  background: var(--line); outline: none; cursor: pointer;
+}
+.bird-level input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--green-deep); border: none; cursor: pointer;
+}
+.bird-level input[type="range"]::-moz-range-thumb {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--green-deep); border: none; cursor: pointer;
+}
+.bird-level input[type="range"]:focus-visible { box-shadow: 0 0 0 3px rgba(63,113,100,0.18); }
+.bird-level output { min-width: 1.4em; color: var(--green-deep); letter-spacing: 0; }
 
 /* ---------- 声音风景：一图一声（tree.fm 式交互，素材与音源全原创） ---------- */
 .scape-gallery { margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--line); }
@@ -559,4 +587,14 @@ html[lang="en"] .nature-btn { letter-spacing: 0.02em; font-size: 13px; }
   .sun, .cloud-a, .cloud-b, .birds, .bird-2, .bird-3, .flower, .breath-ring, .ink, .doll.hit { animation: none !important; }
   .breath-ring { transform: scale(1); opacity: 1; }
   .write-box { transition: opacity 0.2s ease; }
+}
+
+/* 手机：按钮收紧，让 12 个选项更整齐地排成三列 */
+@media (max-width: 480px) {
+  .nature-switch { gap: 6px; }
+  .nature-btn { font-size: 13px; padding: 5px 10px; letter-spacing: 0.02em; }
+  .rec-tag { display: none; }
+  .nature-btn .nature-ico { margin-right: 4px; }
+  .bird-level { font-size: 11px; gap: 8px; }
+  .bird-level input[type="range"] { width: 120px; }
 }
