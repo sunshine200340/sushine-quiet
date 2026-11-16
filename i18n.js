@@ -8,7 +8,7 @@
   var DICT = {
     /* 页面头部 */
     "向阳而生 · 慢慢变好 | sushine.xyz": "Sunward · Grow Better Slowly | sushine.xyz",
-    "给焦虑、迷茫、疲惫的成年人留的一个泄压阀。进站即有温和的雨声，看看空境、听听声音风景、做 60 秒呼吸、写一句想放下的话。无账号、无统计、无第三方请求。": "A pressure valve for anxious, lost, and tired adults. Gentle rain plays on arrival; watch the quiet scene, explore soundscapes, breathe for 60 seconds, or write a line and let it go. No account, no analytics, no third-party requests.",
+    "给焦虑、迷茫、疲惫的成年人留的一个泄压阀。进站即有柔和的大自然声，可切换细雨、森林、溪流、海浪、夜虫，看看空境、听听声音风景、做 60 秒呼吸、写一句想放下的话。无账号、无统计、无第三方请求。": "A pressure valve for anxious, lost, and tired adults. Gentle nature sounds play on arrival — light rain, forest, stream, ocean waves, night crickets. Watch the quiet scene, explore soundscapes, breathe for 60 seconds, or write a line and let it go. No account, no analytics, no third-party requests.",
     "心里有光，慢慢来。这里不用解决什么，先喘口气。": "Light in your heart, take it easy. You don't have to fix anything here — just breathe.",
     /* 品牌 / 导航 */
     "别慌，慢慢来 · 一个不用慌的角落": "No Rush, Take It Easy · A Quiet Corner",
@@ -25,8 +25,8 @@
     "现在就试试": "Try one now",
     "60 秒放空": "60-second reset",
     "跟一次呼吸，回到眼前": "One breath, back to the present",
-    "听会儿雨": "Listen to rain",
-    "进站已在响，随时可关": "Playing on arrival, easy to mute",
+    "听会儿自然声": "Listen to nature",
+    "5 种大自然声，随时切换": "5 nature sounds, switch anytime",
     "一图一声，点开就听": "One image, one sound — tap to listen",
     "写一句放下": "Write it down, let it go",
     "即焚，不留底": "Gone in a moment, kept nowhere",
@@ -69,12 +69,19 @@
     "摔瓶子、戳泡泡、打不倒翁": "Smash bottles, pop bubbles, hit a weeble",
     "做回呼吸": "Come back to your breath",
     "跟着圆圈，慢下来": "Follow the circle. Slow down.",
-    "夜里脑子停不下来的时候，换个天色，听会儿雨声，什么都不用想。": "When your mind won't quiet at night, change the sky, listen to the rain, and think about nothing.",
+    "夜里脑子停不下来的时候，换个天色，听会儿大自然的声音，什么都不用想。": "When your mind won't quiet at night, change the sky, listen to nature, and think about nothing.",
     "看看空境": "Watch the quiet view",
     "白天 / 黄昏 / 夜里，慢慢看": "Day / dusk / night — take your time",
     "听会儿雨声": "Listen to the rain",
-    "雨声 · 背景音": "Rain · Ambient",
-    "轻点开启雨声与背景音": "Tap to turn on rain & ambient",
+    "自然声 · 背景音": "Nature · Ambient",
+    "轻点开启大自然的声音": "Tap to turn on nature sounds",
+    /* 大自然声景切换：细雨 / 森林 / 溪流 / 海浪 / 夜虫 */
+    "选择大自然的声音": "Choose a nature sound",
+    "细雨": "Light rain",
+    "森林": "Forest",
+    "溪流": "Stream",
+    "海浪": "Ocean waves",
+    "夜虫": "Night crickets",
     /* 声音风景 */
     "声音风景 · 点一张，听听那里的声音。": "Soundscapes · Pick one and listen.",
     "声音风景": "Soundscapes",
@@ -117,8 +124,8 @@
     "夜里": "Night",
     "太阳下班了，月亮快上来": "The sun is off duty; the moon is on its way",
     "夜了，安静会儿": "It's night. Be still for a while.",
-    "声音是当场用浏览器合成的，不加载音频文件，也不联网。": "Sounds are made live in your browser — no audio files, no internet needed.",
-    "关掉雨声": "Turn off the rain",
+    "大自然的声音是当场用浏览器合成的，不加载音频文件，也不联网。": "Nature sounds are made live in your browser — no audio files, no internet needed.",
+    "关掉自然声": "Turn off the sound",
 
     /* 释放馆 */
     "有些情绪，坐着想是想不掉的。这儿有几个虚拟小游戏，点一点、摔一摔，把那口气先撒出来。": "Some feelings can't be thought away. Here are a few little games — tap, smash, and let that breath out.",
