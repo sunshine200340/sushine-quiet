@@ -158,6 +158,12 @@ html[lang="en"] .i18n-unit { display: none; }
 .hero--photo .lang-sep { color: rgba(255,255,255,0.95); }
 .hero--photo .brand-name { text-shadow: 0 1px 10px rgba(0,0,0,0.28); }
 .hero--photo .topnav a:hover { color: #fff; border-bottom-color: #fff; }
+.hero--photo .topnav a.nav-xiaobot {
+  color: #fff; background: rgba(207,138,91,0.88); border: 1px solid rgba(255,255,255,0.6);
+  border-bottom-color: rgba(255,255,255,0.6); border-radius: 999px; padding: 5px 12px;
+  margin-top: -4px; font-family: var(--sans); font-size: 12px; letter-spacing: 0.04em;
+}
+.hero--photo .topnav a.nav-xiaobot:hover { background: #cf8a5b; color: #fff; border-color: #fff; }
 .hero--photo .topbar-cta {
   border-color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.14);
   backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
@@ -481,13 +487,16 @@ html[lang="en"] .i18n-unit { display: none; }
 /* ---------- support (变现出口) ---------- */
 .support { margin: 40px 0 0; padding: 34px; background: var(--green-soft); border-radius: 4px; }
 .support-lead { margin: 0 0 24px; font-size: 14px; line-height: 1.9; color: var(--ink-soft); }
-.support-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.support-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; }
 .support-card {
   display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
   padding: 20px 18px; background: rgba(255,255,255,0.76); border: 1px solid rgba(91,149,166,0.28); border-radius: 4px;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
-.support-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px -16px rgba(79,108,88,0.5); color: var(--ink); }
+.support-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px -16px rgba(34,99,124,0.5); color: var(--ink); }
+.support-card.is-featured { background: var(--green-soft); border-color: var(--green); }
+.support-card.is-featured strong { font-size: 18px; color: var(--green-deep); }
+.support-card.is-featured .support-ico { color: var(--ochre); }
 .support-ico { font-size: 22px; color: var(--green); line-height: 1; }
 .support-card strong { font-size: 16px; font-weight: 400; letter-spacing: 0.08em; color: var(--ink); }
 .support-card > span:last-child { font-family: var(--sans); font-size: 12px; color: var(--ink-faint); }

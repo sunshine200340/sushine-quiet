@@ -8,7 +8,7 @@
   var DICT = {
     /* 页面头部 */
     "向阳而生 · 慢慢变好 | sushine.xyz": "Sunward · Grow Better Slowly | sushine.xyz",
-    "给焦虑、迷茫、疲惫的成年人留的一个泄压阀。进站即有雨声与柔和背景音，看看空境、听听声音风景、做 60 秒呼吸、写一句想放下的话。无账号、无统计、无第三方请求。": "A pressure valve for anxious, lost, and tired adults. Rain and soft ambient music play on arrival; watch the quiet scene, explore soundscapes, breathe for 60 seconds, or write a line and let it go. No account, no analytics, no third-party requests.",
+    "给焦虑、迷茫、疲惫的成年人留的一个泄压阀。进站即有温和的雨声，看看空境、听听声音风景、做 60 秒呼吸、写一句想放下的话。无账号、无统计、无第三方请求。": "A pressure valve for anxious, lost, and tired adults. Gentle rain plays on arrival; watch the quiet scene, explore soundscapes, breathe for 60 seconds, or write a line and let it go. No account, no analytics, no third-party requests.",
     "心里有光，慢慢来。这里不用解决什么，先喘口气。": "Light in your heart, take it easy. You don't have to fix anything here — just breathe.",
     /* 品牌 / 导航 */
     "别慌，慢慢来 · 一个不用慌的角落": "No Rush, Take It Easy · A Quiet Corner",
@@ -207,6 +207,7 @@
     "老杨的认知专栏 · 小报童": "Lao Yang's thinking column · Xiaobaotong",
     "找个地方聊": "Find a place to talk",
     "知识星球 · 一起把事推进": "Knowledge Planet · Make progress together",
+    "小报童": "Xiaobot",
     "谈个合作": "Work with us",
     "品牌 / 好物 / 场地": "Brands / goods / venues",
     "合作来信：qiangda68@163.com。我们只接与「放松、好睡眠、情绪健康」相关、且不夸大功效的合作。": "Write to qiangda68@163.com. We only take partnerships related to rest, better sleep, and emotional wellbeing — and never overstate effects.",

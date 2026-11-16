@@ -132,61 +132,37 @@
     rainNode = null;
   }
 
-  /* 背景氛围音乐：持续柔和音 + 缓慢铃音 + 极轻气流，全部当场合成 */
+  /* 背景声：参照 rainymood 的温和雨幕——只有低频雨声，没有音符、铃音或气流噪声 */
   var musicNodes = null;
   function startMusic() {
     var ac = ctx(); if (!ac || musicNodes) return false;
-    var master = ac.createGain(); master.gain.value = 0; master.connect(ac.destination);
-    var lp = ac.createBiquadFilter();
-    lp.type = 'lowpass'; lp.frequency.value = 1250; lp.Q.value = 0.4; lp.connect(master);
+    var src = ac.createBufferSource(); src.buffer = getNoise(ac); src.loop = true;
+    var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 420; lp.Q.value = 0.4;
+    var gain = ac.createGain(); gain.gain.value = 0;
+    src.connect(lp); lp.connect(gain); gain.connect(ac.destination); src.start();
+    gain.gain.linearRampToValueAtTime(0.032, ac.currentTime + 4);
 
-    /* Dmaj7 的四个音，微失谐让声音更暖 */
-    var chord = [146.83, 220, 277.18, 369.99];
-    var oscs = chord.map(function (f, i) {
-      var o = ac.createOscillator();
-      o.type = i === 3 ? 'sine' : 'triangle';
-      o.frequency.value = f; o.detune.value = i % 2 ? 5 : -5;
-      var g = ac.createGain(); g.gain.value = i === 3 ? 0.035 : 0.055;
-      o.connect(g); g.connect(lp); o.start();
-      return { o: o, g: g };
-    });
+    /* 极慢的呼吸，让雨幕有起伏但不吵 */
+    var lfo = ac.createOscillator(); lfo.frequency.value = 0.05;
+    var lfoGain = ac.createGain(); lfoGain.gain.value = 0.01;
+    lfo.connect(lfoGain); lfoGain.connect(gain.gain); lfo.start();
 
-    var air = ac.createBufferSource(); air.buffer = getNoise(ac); air.loop = true;
-    var bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 520; bp.Q.value = 0.6;
-    var airGain = ac.createGain(); airGain.gain.value = 0.016;
-    air.connect(bp); bp.connect(airGain); airGain.connect(master); air.start();
-
-    var notes = [293.66, 329.63, 369.99, 440, 493.88, 554.37];
-    var idx = Math.floor(Math.random() * notes.length);
-    var timer = window.setInterval(function () {
-      if (!musicNodes || !audioCtx) return;
-      var t = audioCtx.currentTime;
-      var o = audioCtx.createOscillator(); var g = audioCtx.createGain();
-      o.type = 'sine'; o.frequency.value = notes[idx++ % notes.length];
-      g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(0.05, t + 0.09);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 2.6);
-      o.connect(g); g.connect(master); o.start(t); o.stop(t + 2.7);
-    }, 4200);
-
-    master.gain.linearRampToValueAtTime(0.34, ac.currentTime + 5);
-    musicNodes = { master: master, oscs: oscs, air: air, timer: timer };
+    musicNodes = { src: src, gain: gain, lfo: lfo };
     return true;
   }
   function stopMusic() {
     if (!musicNodes || !audioCtx) return;
     var m = musicNodes; musicNodes = null;
-    window.clearInterval(m.timer);
     try {
       var t = audioCtx.currentTime;
-      m.master.gain.cancelScheduledValues(t);
-      m.master.gain.setValueAtTime(m.master.gain.value, t);
-      m.master.gain.linearRampToValueAtTime(0, t + 1.2);
+      m.gain.gain.cancelScheduledValues(t);
+      m.gain.gain.setValueAtTime(m.gain.gain.value, t);
+      m.gain.gain.linearRampToValueAtTime(0, t + 1.2);
     } catch (e) {}
     window.setTimeout(function () {
-      m.oscs.forEach(function (x) { try { x.o.stop(); } catch (e) {} });
-      try { m.air.stop(); } catch (e) {}
-      try { m.master.disconnect(); } catch (e) {}
+      try { m.src.stop(); } catch (e) {}
+      try { m.lfo.stop(); } catch (e) {}
+      try { m.gain.disconnect(); } catch (e) {}
     }, 1400);
   }
 
@@ -210,7 +186,7 @@
     if (soundHint) soundHint.hidden = true;
   }
   function startAllSounds() {
-    startRain(0.085); startMusic(); syncSoundUI(); detachGesture();
+    startRain(0.055); startMusic(); syncSoundUI(); detachGesture();
   }
   function stopAllSounds() {
     stopRain(); stopMusic(); syncSoundUI();
@@ -232,7 +208,7 @@
     soundHint.addEventListener('click', function () { startAllSounds(); });
   }
   soundBtn.addEventListener('click', function () {
-    if (rainNode) stopRain(); else startRain(0.12);
+    if (rainNode) stopRain(); else startRain(0.08);
     syncSoundUI();
     detachGesture();
   });
@@ -255,7 +231,7 @@
   var SCAPES = {
     forest: { name: '山林', desc: '林子里有风穿过叶子，偶尔一两声鸟叫。', type: 'bandpass', freq: 1800, q: 0.7, gain: 0.055, sweep: [0.12, 700], event: 'bird', every: 2600 },
     lake:   { name: '湖畔', desc: '水一下一下拍着岸，远处安静得只剩回声。', type: 'lowpass', freq: 700, q: 0.5, gain: 0.07, sweep: [0.16, 260], event: 'drop', every: 3800 },
-    rain:   { name: '雨夜', desc: '雨落下来，世界被调成了低音量。', type: 'lowpass', freq: 1100, q: 0.4, gain: 0.095, event: 'none', every: 0 },
+    rain:   { name: '雨夜', desc: '雨落下来，世界被调成了低音量。', type: 'lowpass', freq: 1100, q: 0.4, gain: 0.07, event: 'none', every: 0 },
     wind:   { name: '风原', desc: '草被风一遍遍抚过，天很宽。', type: 'bandpass', freq: 520, q: 0.9, gain: 0.075, sweep: [0.07, 380], event: 'none', every: 0 },
     fire:   { name: '篝火', desc: '木柴轻轻炸开，暖光一闪一闪。', type: 'lowpass', freq: 420, q: 0.6, gain: 0.04, event: 'crackle', every: 900 }
   };
