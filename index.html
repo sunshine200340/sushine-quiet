@@ -12,42 +12,45 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="paper">
-
-  <!-- ============ 顶栏（Calm 式：品牌 + 分区导航 + 免费入口） ============ -->
-  <header class="topbar">
-    <div class="brand">
-      <span class="brand-name">别慌</span>
-      <span class="brand-sub">一个不用慌的角落</span>
-    </div>
-    <nav class="topnav" aria-label="分区导航">
-      <a href="#feelbetter">少点慌</a>
-      <a href="#sleep">睡得着</a>
-      <a href="#mindful">慢慢活</a>
-      <a href="#faq">常见问题</a>
-    </nav>
-    <a class="topbar-cta" href="#checkin">现在开始 <span aria-hidden="true">↗</span></a>
-    <div class="lang-switch" role="group" aria-label="Language / 语言">
-      <button type="button" class="lang-btn is-active" data-lang="zh" aria-pressed="true">中</button>
-      <span class="lang-sep" aria-hidden="true">/</span>
-      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
-    </div>
-    <div class="today" id="today">&nbsp;</div>
-  </header>
+<div class="paper paper--home">
 
   <main>
 
-    <!-- ============ HERO：情绪共鸣钩子 + 免费行动号召 ============ -->
-    <section class="hero" aria-label="开场">
-      <p class="hero-kicker" id="heroKicker">慌啥子嘛</p>
-      <h1 class="hero-title">别慌，<em>慢慢来。</em></h1>
-      <p class="hero-line">你不是一个人着急。</p>
-      <p class="hero-sub">这里不用解决什么，也不用想明白什么。<br>先喘口气，剩下的，等喘匀了再说。</p>
-      <div class="hero-actions">
-        <a class="btn btn-strong" href="#checkin">从这里开始 <span aria-hidden="true">→</span></a>
-        <a class="btn btn-ghost" href="#feelbetter">看看能做什么 <span aria-hidden="true">↓</span></a>
+    <!-- ============ HERO：山湖照片 + 顶栏 + 情绪共鸣钩子 ============ -->
+    <section class="hero hero--photo" aria-label="开场">
+      <div class="hero-media">
+        <!-- ============ 顶栏（Calm 式：品牌 + 分区导航 + 免费入口） ============ -->
+        <header class="topbar">
+          <div class="brand">
+            <span class="brand-name">别慌</span>
+            <span class="brand-sub">一个不用慌的角落</span>
+          </div>
+          <nav class="topnav" aria-label="分区导航">
+            <a href="#feelbetter">少点慌</a>
+            <a href="#sleep">睡得着</a>
+            <a href="#mindful">慢慢活</a>
+            <a href="#faq">常见问题</a>
+          </nav>
+          <a class="topbar-cta" href="#checkin">现在开始 <span aria-hidden="true">↗</span></a>
+          <div class="lang-switch" role="group" aria-label="Language / 语言">
+            <button type="button" class="lang-btn is-active" data-lang="zh" aria-pressed="true">中</button>
+            <span class="lang-sep" aria-hidden="true">/</span>
+            <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+          <div class="today" id="today">&nbsp;</div>
+        </header>
       </div>
-      <p class="hero-footnote">完全免费 · 不用注册 · 不测不记不上传</p>
+      <div class="hero-body">
+        <p class="hero-kicker" id="heroKicker">慌啥子嘛</p>
+        <h1 class="hero-title">别慌，<em>慢慢来。</em></h1>
+        <p class="hero-line">你不是一个人着急。</p>
+        <p class="hero-sub">这里不用解决什么，也不用想明白什么。<br>先喘口气，剩下的，等喘匀了再说。</p>
+        <div class="hero-actions">
+          <a class="btn btn-strong" href="#checkin">从这里开始 <span aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href="#feelbetter">看看能做什么 <span aria-hidden="true">↓</span></a>
+        </div>
+        <p class="hero-footnote">完全免费 · 不用注册 · 不测不记不上传</p>
+      </div>
     </section>
 
     <!-- ============ 三大需求分区（Calm: Stress less / Sleep more / Live mindfully） ============ -->
