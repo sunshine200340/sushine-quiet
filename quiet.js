@@ -99,7 +99,7 @@
   var noiseBuffer = null;
   function getNoise(ac) {
     if (noiseBuffer && noiseBuffer.sampleRate === ac.sampleRate) return noiseBuffer;
-    var len = ac.sampleRate * 2;
+    var len = ac.sampleRate * 4;
     var buf = ac.createBuffer(1, len, ac.sampleRate);
     var data = buf.getChannelData(0);
     for (var i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
@@ -107,9 +107,9 @@
     return buf;
   }
 
-  /* 雨声：低通白噪声循环 */
+  /* 雨声：低通白噪声循环（自动播放与手动开关共用） */
   var rainNode = null;
-  function startRain() {
+  function startRain(volume) {
     var ac = ctx(); if (!ac) return false;
     var src = ac.createBufferSource();
     src.buffer = getNoise(ac); src.loop = true;
@@ -118,7 +118,7 @@
     var gain = ac.createGain(); gain.gain.value = 0.0;
     src.connect(filter); filter.connect(gain); gain.connect(ac.destination);
     src.start();
-    gain.gain.linearRampToValueAtTime(0.12, ac.currentTime + 1.2);
+    gain.gain.linearRampToValueAtTime(volume || 0.12, ac.currentTime + 1.2);
     rainNode = { src: src, gain: gain };
     return true;
   }
@@ -131,15 +131,247 @@
     } catch (e) {}
     rainNode = null;
   }
+
+  /* 背景氛围音乐：持续柔和音 + 缓慢铃音 + 极轻气流，全部当场合成 */
+  var musicNodes = null;
+  function startMusic() {
+    var ac = ctx(); if (!ac || musicNodes) return false;
+    var master = ac.createGain(); master.gain.value = 0; master.connect(ac.destination);
+    var lp = ac.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 1250; lp.Q.value = 0.4; lp.connect(master);
+
+    /* Dmaj7 的四个音，微失谐让声音更暖 */
+    var chord = [146.83, 220, 277.18, 369.99];
+    var oscs = chord.map(function (f, i) {
+      var o = ac.createOscillator();
+      o.type = i === 3 ? 'sine' : 'triangle';
+      o.frequency.value = f; o.detune.value = i % 2 ? 5 : -5;
+      var g = ac.createGain(); g.gain.value = i === 3 ? 0.035 : 0.055;
+      o.connect(g); g.connect(lp); o.start();
+      return { o: o, g: g };
+    });
+
+    var air = ac.createBufferSource(); air.buffer = getNoise(ac); air.loop = true;
+    var bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 520; bp.Q.value = 0.6;
+    var airGain = ac.createGain(); airGain.gain.value = 0.016;
+    air.connect(bp); bp.connect(airGain); airGain.connect(master); air.start();
+
+    var notes = [293.66, 329.63, 369.99, 440, 493.88, 554.37];
+    var idx = Math.floor(Math.random() * notes.length);
+    var timer = window.setInterval(function () {
+      if (!musicNodes || !audioCtx) return;
+      var t = audioCtx.currentTime;
+      var o = audioCtx.createOscillator(); var g = audioCtx.createGain();
+      o.type = 'sine'; o.frequency.value = notes[idx++ % notes.length];
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.05, t + 0.09);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 2.6);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + 2.7);
+    }, 4200);
+
+    master.gain.linearRampToValueAtTime(0.34, ac.currentTime + 5);
+    musicNodes = { master: master, oscs: oscs, air: air, timer: timer };
+    return true;
+  }
+  function stopMusic() {
+    if (!musicNodes || !audioCtx) return;
+    var m = musicNodes; musicNodes = null;
+    window.clearInterval(m.timer);
+    try {
+      var t = audioCtx.currentTime;
+      m.master.gain.cancelScheduledValues(t);
+      m.master.gain.setValueAtTime(m.master.gain.value, t);
+      m.master.gain.linearRampToValueAtTime(0, t + 1.2);
+    } catch (e) {}
+    window.setTimeout(function () {
+      m.oscs.forEach(function (x) { try { x.o.stop(); } catch (e) {} });
+      try { m.air.stop(); } catch (e) {}
+      try { m.master.disconnect(); } catch (e) {}
+    }, 1400);
+  }
+
+  /* 进站即尝试播放：雨声 + 背景音；浏览器拦截时给一次轻提示 */
   var soundBtn = $('soundBtn');
   var soundLabel = $('soundLabel');
-  soundBtn.addEventListener('click', function () {
-    var on = soundBtn.getAttribute('aria-pressed') === 'true';
-    if (on) {
-      stopRain(); soundBtn.setAttribute('aria-pressed', 'false'); soundLabel.textContent = T('听会儿雨声');
-    } else {
-      if (startRain()) { soundBtn.setAttribute('aria-pressed', 'true'); soundLabel.textContent = T('关掉雨声'); }
+  var ambientBtn = $('ambientBtn');
+  var soundHint = $('soundHint');
+  function syncSoundUI() {
+    var on = !!(rainNode || musicNodes);
+    if (ambientBtn) ambientBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (soundBtn) {
+      soundBtn.setAttribute('aria-pressed', rainNode ? 'true' : 'false');
+      soundLabel.textContent = T(rainNode ? '关掉雨声' : '听会儿雨声');
     }
+    if (soundHint) soundHint.hidden = on;
+  }
+  function detachGesture() {
+    document.removeEventListener('pointerdown', onFirstGesture);
+    document.removeEventListener('keydown', onFirstGesture);
+    if (soundHint) soundHint.hidden = true;
+  }
+  function startAllSounds() {
+    startRain(0.085); startMusic(); syncSoundUI(); detachGesture();
+  }
+  function stopAllSounds() {
+    stopRain(); stopMusic(); syncSoundUI();
+  }
+  function onFirstGesture(e) {
+    var t = e.target;
+    if (t && t.closest && (t.closest('#ambientBtn') || t.closest('#soundBtn') || t.closest('#soundHint'))) return;
+    startAllSounds();
+  }
+  document.addEventListener('pointerdown', onFirstGesture);
+  document.addEventListener('keydown', onFirstGesture);
+
+  if (ambientBtn) {
+    ambientBtn.addEventListener('click', function () {
+      if (rainNode || musicNodes) stopAllSounds(); else startAllSounds();
+    });
+  }
+  if (soundHint) {
+    soundHint.addEventListener('click', function () { startAllSounds(); });
+  }
+  soundBtn.addEventListener('click', function () {
+    if (rainNode) stopRain(); else startRain(0.12);
+    syncSoundUI();
+    detachGesture();
+  });
+
+  (function attemptAutoSound() {
+    var ac = ctx(); if (!ac) return;
+    var settled = false;
+    function decide() {
+      if (settled) return; settled = true;
+      if (ac.state === 'running') startAllSounds();
+      else if (soundHint) soundHint.hidden = false;
+    }
+    if (ac.state === 'suspended' && ac.resume) {
+      try { Promise.resolve(ac.resume()).then(decide, function () { if (soundHint) soundHint.hidden = false; }); } catch (e) {}
+      window.setTimeout(decide, 1000);
+    } else decide();
+  })();
+
+  /* ---------- 声音风景：一图一声（tree.fm 式交互，音源全为现场合成） ---------- */
+  var SCAPES = {
+    forest: { name: '山林', desc: '林子里有风穿过叶子，偶尔一两声鸟叫。', type: 'bandpass', freq: 1800, q: 0.7, gain: 0.055, sweep: [0.12, 700], event: 'bird', every: 2600 },
+    lake:   { name: '湖畔', desc: '水一下一下拍着岸，远处安静得只剩回声。', type: 'lowpass', freq: 700, q: 0.5, gain: 0.07, sweep: [0.16, 260], event: 'drop', every: 3800 },
+    rain:   { name: '雨夜', desc: '雨落下来，世界被调成了低音量。', type: 'lowpass', freq: 1100, q: 0.4, gain: 0.095, event: 'none', every: 0 },
+    wind:   { name: '风原', desc: '草被风一遍遍抚过，天很宽。', type: 'bandpass', freq: 520, q: 0.9, gain: 0.075, sweep: [0.07, 380], event: 'none', every: 0 },
+    fire:   { name: '篝火', desc: '木柴轻轻炸开，暖光一闪一闪。', type: 'lowpass', freq: 420, q: 0.6, gain: 0.04, event: 'crackle', every: 900 }
+  };
+  var scapeNodes = null;
+  var currentScape = null;
+  var scapePrevOn = false;
+  var scapeOverlay = $('scapeOverlay');
+  var scapeArt = $('scapeArt');
+  var scapeTitle = $('scapeTitle');
+  var scapeDesc = $('scapeDesc');
+  var scapeClose = $('scapeClose');
+
+  function scapeEvent(ac, kind, bus) {
+    var t = ac.currentTime;
+    if (kind === 'bird') {
+      var o = ac.createOscillator(); var g = ac.createGain();
+      var base = 1700 + Math.random() * 900;
+      o.type = 'sine'; o.frequency.setValueAtTime(base, t);
+      o.frequency.exponentialRampToValueAtTime(base * 1.5, t + 0.12);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.05, t + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.36);
+      o.connect(g); g.connect(bus); o.start(t); o.stop(t + 0.4);
+    } else if (kind === 'drop') {
+      var o2 = ac.createOscillator(); var g2 = ac.createGain();
+      var f = 620 + Math.random() * 260;
+      o2.type = 'sine'; o2.frequency.setValueAtTime(f, t);
+      o2.frequency.exponentialRampToValueAtTime(f * 0.62, t + 0.24);
+      g2.gain.setValueAtTime(0.0001, t);
+      g2.gain.exponentialRampToValueAtTime(0.045, t + 0.015);
+      g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+      o2.connect(g2); g2.connect(bus); o2.start(t); o2.stop(t + 0.45);
+    } else if (kind === 'crackle') {
+      var src = ac.createBufferSource(); src.buffer = getNoise(ac);
+      var hp = ac.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1800;
+      var g3 = ac.createGain();
+      g3.gain.setValueAtTime(0.0001, t);
+      g3.gain.exponentialRampToValueAtTime(0.05 + Math.random() * 0.05, t + 0.008);
+      g3.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+      src.connect(hp); hp.connect(g3); g3.connect(bus); src.start(t); src.stop(t + 0.1);
+    }
+  }
+
+  function startScape(key) {
+    var ac = ctx();
+    var cfg = SCAPES[key];
+    if (!ac || !cfg) return false;
+    stopScape();
+    var src = ac.createBufferSource(); src.buffer = getNoise(ac); src.loop = true;
+    var filter = ac.createBiquadFilter();
+    filter.type = cfg.type; filter.frequency.value = cfg.freq; filter.Q.value = cfg.q || 0.5;
+    var gain = ac.createGain(); gain.gain.value = 0;
+    src.connect(filter); filter.connect(gain); gain.connect(ac.destination); src.start();
+    gain.gain.linearRampToValueAtTime(cfg.gain, ac.currentTime + 1.4);
+
+    var lfo = null, lfoGain = null, timer = null;
+    if (cfg.sweep) {
+      lfo = ac.createOscillator(); lfo.frequency.value = cfg.sweep[0];
+      lfoGain = ac.createGain(); lfoGain.gain.value = cfg.sweep[1];
+      lfo.connect(lfoGain); lfoGain.connect(filter.frequency); lfo.start();
+    }
+    var bus = ac.createGain(); bus.gain.value = 0.65; bus.connect(ac.destination);
+    if (cfg.event !== 'none' && cfg.event && cfg.every) {
+      timer = window.setInterval(function () {
+        if (scapeNodes && scapeNodes.key === key) scapeEvent(ac, cfg.event, bus);
+      }, cfg.every);
+    }
+    scapeNodes = { src: src, gain: gain, lfo: lfo, timer: timer, bus: bus, key: key };
+    currentScape = key;
+    return true;
+  }
+
+  function stopScape() {
+    if (!scapeNodes || !audioCtx) { currentScape = null; return; }
+    var m = scapeNodes; scapeNodes = null; currentScape = null;
+    window.clearInterval(m.timer);
+    try {
+      m.gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.7);
+    } catch (e) {}
+    window.setTimeout(function () {
+      try { m.src.stop(); } catch (e) {}
+      try { if (m.lfo) m.lfo.stop(); } catch (e) {}
+      try { m.bus.disconnect(); } catch (e) {}
+    }, 900);
+  }
+
+  function openScape(btn) {
+    var key = btn.getAttribute('data-scape');
+    var cfg = SCAPES[key];
+    if (!cfg || !scapeOverlay) return;
+    scapePrevOn = !!(rainNode || musicNodes);
+    stopAllSounds();
+    scapeArt.innerHTML = '';
+    var svg = btn.querySelector('svg');
+    if (svg) scapeArt.appendChild(svg.cloneNode(true));
+    scapeTitle.textContent = T(cfg.name);
+    scapeDesc.textContent = T(cfg.desc);
+    scapeOverlay.hidden = false;
+    startScape(key);
+    scapeClose.focus();
+  }
+  function closeScape() {
+    stopScape();
+    if (scapeOverlay) scapeOverlay.hidden = true;
+    if (scapePrevOn) startAllSounds();
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.scape-card'), function (card) {
+    card.addEventListener('click', function () { openScape(card); });
+  });
+  if (scapeClose) scapeClose.addEventListener('click', closeScape);
+  if (scapeOverlay) {
+    scapeOverlay.addEventListener('click', function (e) { if (e.target === scapeOverlay) closeScape(); });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && scapeOverlay && !scapeOverlay.hidden) closeScape();
   });
 
   /* 短音效：爆裂 / 泡泡 / 闷响 */
@@ -350,7 +582,11 @@
       renderDate();
       if (currentMood) showReply(currentMood);
       sceneCaption.textContent = T(CAPTIONS[currentPhase] || '');
-      soundLabel.textContent = soundBtn.getAttribute('aria-pressed') === 'true' ? T('关掉雨声') : T('听会儿雨声');
+      syncSoundUI();
+      if (currentScape && SCAPES[currentScape]) {
+        scapeTitle.textContent = T(SCAPES[currentScape].name);
+        scapeDesc.textContent = T(SCAPES[currentScape].desc);
+      }
       breathWord.textContent = breathLabel();
       if (timerId === null) timerBtn.textContent = timerIdleLabel();
       if (bubbleArea.children.length) {

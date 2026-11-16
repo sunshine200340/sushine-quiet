@@ -9,7 +9,7 @@
 <meta property="og:title" content="别慌，慢慢来 · 一个不用慌的角落">
 <meta property="og:description" content="你不是一个人着急。这里不用解决什么，先喘口气。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237f9c86'/%3E%3Ctext x='32' y='44' font-size='30' font-family='serif' text-anchor='middle' fill='%23fff'%3E%E6%85%A2%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=20261116b">
+<link rel="stylesheet" href="style.css?v=20261116c">
 </head>
 <body>
 <div class="paper paper--home">
@@ -32,6 +32,7 @@
             <a href="#faq">常见问题</a>
           </nav>
           <a class="topbar-cta" href="#checkin">现在开始 <span aria-hidden="true">↗</span></a>
+          <button type="button" class="ambient-btn" id="ambientBtn" aria-pressed="false"><span aria-hidden="true">♫</span><span>雨声 · 背景音</span></button>
           <div class="lang-switch" role="group" aria-label="Language / 语言">
             <button type="button" class="lang-btn is-active" data-lang="zh" aria-pressed="true">中</button>
             <span class="lang-sep" aria-hidden="true">/</span>
@@ -205,6 +206,32 @@
         </button>
       </div>
       <p class="quiet-note">声音是当场用浏览器合成的，不加载音频文件，也不联网。</p>
+
+      <div class="scape-gallery" id="scapeGallery" aria-label="声音风景">
+        <p class="scape-intro">声音风景 · 点一张，听听那里的声音。</p>
+        <div class="scape-grid">
+          <button type="button" class="scape-card" data-scape="forest">
+            <svg viewBox="0 0 200 120" aria-hidden="true" focusable="false"><rect width="200" height="120" fill="#dceef1"/><path d="M0 92 Q100 70 200 92 V120 H0Z" fill="#8fb6a6"/><g fill="#3f7164"><path d="M38 92 L52 42 L66 92Z"/><path d="M84 92 L98 30 L112 92Z"/><path d="M138 92 L152 48 L166 92Z"/></g><g stroke="#3f7164" stroke-width="4"><path d="M52 92v18M98 92v18M152 92v18"/></g></svg>
+            <span>山林</span>
+          </button>
+          <button type="button" class="scape-card" data-scape="lake">
+            <svg viewBox="0 0 200 120" aria-hidden="true" focusable="false"><rect width="200" height="120" fill="#dceef1"/><path d="M0 70 L50 28 L92 70 L130 42 L200 70Z" fill="#8fb0bd"/><rect y="70" width="200" height="50" fill="#a9cdd6"/><path d="M0 84 Q50 78 100 84 T200 84M0 100 Q50 94 100 100 T200 100" stroke="#fff" stroke-opacity=".6" fill="none"/></svg>
+            <span>湖畔</span>
+          </button>
+          <button type="button" class="scape-card" data-scape="rain">
+            <svg viewBox="0 0 200 120" aria-hidden="true" focusable="false"><rect width="200" height="120" fill="#cbd9e2"/><path d="M30 46 q20-24 44-6 q22-18 40 6Z" fill="#f4f8fa"/><g stroke="#7fa7bd" stroke-width="2"><path d="M50 62l-6 16M84 58l-6 16M118 64l-6 16M150 60l-6 16"/></g><path d="M0 104 Q100 96 200 104V120H0Z" fill="#9dbccb"/></svg>
+            <span>雨夜</span>
+          </button>
+          <button type="button" class="scape-card" data-scape="wind">
+            <svg viewBox="0 0 200 120" aria-hidden="true" focusable="false"><rect width="200" height="120" fill="#e8f2e9"/><g stroke="#7fa68c" stroke-width="2" fill="none"><path d="M10 90 Q60 60 110 88 T190 82"/><path d="M20 104 Q70 74 120 100 T190 96"/><path d="M30 74 Q70 50 120 72"/></g><circle cx="158" cy="30" r="14" fill="#f5e7bd"/></svg>
+            <span>风原</span>
+          </button>
+          <button type="button" class="scape-card" data-scape="fire">
+            <svg viewBox="0 0 200 120" aria-hidden="true" focusable="false"><rect width="200" height="120" fill="#efe6dd"/><path d="M0 100 Q100 88 200 100V120H0Z" fill="#c9b7a7"/><path d="M100 96 C76 78 92 60 100 42 C108 60 124 78 100 96Z" fill="#d98a5b"/><path d="M100 92 C90 80 98 68 100 58 C104 68 112 80 100 92Z" fill="#f2c47a"/></svg>
+            <span>篝火</span>
+          </button>
+        </div>
+      </div>
     </section>
 
     <!-- ============ 压力释放馆 ============ -->
@@ -446,8 +473,22 @@
     </p>
   </footer>
 
+  <button type="button" class="sound-hint" id="soundHint" hidden>
+    <span aria-hidden="true">♫</span> 轻点开启雨声与背景音
+  </button>
 </div>
-<script src="i18n.js" defer></script>
-<script src="quiet.js" defer></script>
+
+<div class="scape-overlay" id="scapeOverlay" hidden role="dialog" aria-modal="true" aria-label="声音风景">
+  <div class="scape-overlay-inner">
+    <div class="scape-art" id="scapeArt" aria-hidden="true"></div>
+    <p class="scape-now">正在听：</p>
+    <h2 class="scape-title" id="scapeTitle"></h2>
+    <p class="scape-desc" id="scapeDesc"></p>
+    <button type="button" class="btn btn-strong" id="scapeClose">关掉声音，回去</button>
+  </div>
+</div>
+
+<script src="i18n.js?v=20261116c" defer></script>
+<script src="quiet.js?v=20261116c" defer></script>
 </body>
 </html>
