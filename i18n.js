@@ -183,15 +183,6 @@
     "把一首老歌从头听到尾": "Listen to an old song all the way through",
     "给绿植浇点水": "Water a plant",
 
-    /* 数据区 */
-    "这一页的「数据」": "This page's \"numbers\"",
-    "别的地方会告诉你有多少人用、多少五星。这里没有账号，所以数不出来。能确定的是下面这些：": "Other sites tell you how many people use them and how many stars they got. There are no accounts here, so we can't count. What we can promise is this:",
-    "账号 / 登录": "Accounts / sign-ins",
-    "Cookie / 统计": "Cookies / analytics",
-    "主动网络请求": "Outbound requests",
-    "广告 / 付费墙": "Ads / paywalls",
-    "这不是自我表扬，是这一页的设计约束：服务端用 CSP 禁止了本页主动发起网络请求，你写下的字只留在当前页面内存里。": "This isn't self-praise — it's a design constraint. The server uses CSP to block this page from making network requests, and what you write stays in this page's memory.",
-
     /* 求助 */
     "如果不想一个人待着": "If you don't want to be alone",
     "这一页帮不上真正难的那些时刻。下面的号码，那头有人守着。": "This page can't help through the truly hard moments. Someone is available at the numbers below.",

@@ -48,7 +48,6 @@ html[lang="en"] .brand-name,
 html[lang="en"] .hero-title,
 html[lang="en"] .need-head h2,
 html[lang="en"] .room-head h2,
-html[lang="en"] .numbers h2,
 html[lang="en"] .help h2,
 html[lang="en"] .support h2,
 html[lang="en"] .faq h2 { letter-spacing: 0.01em; }
@@ -461,20 +460,8 @@ html[lang="en"] .i18n-unit { display: none; }
 }
 .small-list li::before { content: ""; flex: 0 0 5px; width: 5px; height: 5px; border-radius: 50%; background: var(--green); transform: translateY(-3px); }
 
-/* ---------- numbers (社会证明的合规替代) ---------- */
-.numbers { margin: 72px 0 0; padding: 34px; background: var(--green-soft); border-radius: 4px; }
-.numbers h2, .faq h2 { margin: 0 0 12px; font-size: 21px; font-weight: 400; letter-spacing: 0.14em; color: var(--ink); }
-.numbers > p { margin: 0 0 22px; font-size: 14px; line-height: 1.9; color: var(--ink-soft); }
-.number-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-.number-cell {
-  display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 18px 8px;
-  background: rgba(255,255,255,0.7); border: 1px solid rgba(91,149,166,0.26); border-radius: 4px; text-align: center;
-}
-.number-cell strong { font-size: 34px; font-weight: 400; line-height: 1.1; color: var(--green-deep); font-variant-numeric: tabular-nums; }
-.number-cell span { font-family: var(--sans); font-size: 12px; color: var(--ink-faint); }
-.numbers-note { margin: 20px 0 0 !important; font-family: var(--sans); font-size: 12px !important; line-height: 1.8 !important; color: var(--ink-faint) !important; }
-
 /* ---------- help ---------- */
+.faq h2 { margin: 0 0 12px; font-size: 21px; font-weight: 400; letter-spacing: 0.14em; color: var(--ink); }
 .help { margin: 40px 0 0; padding: 34px 34px 30px; background: var(--ochre-soft); border-radius: 4px; }
 .help h2, .support h2 { margin: 0 0 12px; font-size: 20px; font-weight: 400; letter-spacing: 0.16em; color: var(--ink); }
 .help > p { margin: 0 0 20px; font-size: 14px; color: var(--ink-soft); letter-spacing: 0.04em; }
@@ -533,7 +520,6 @@ html[lang="en"] .i18n-unit { display: none; }
   .quick-grid { grid-template-columns: repeat(2, 1fr); }
   .needs-nav { grid-template-columns: 1fr; }
   .need-cards { grid-template-columns: 1fr; }
-  .number-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 640px) {
   .paper { padding: 26px 20px 60px; }
@@ -550,7 +536,6 @@ html[lang="en"] .i18n-unit { display: none; }
   .support-grid { grid-template-columns: 1fr; }
   .room-head, .need-head { gap: 12px; }
   .help { padding: 26px 20px 24px; }
-  .numbers { padding: 24px 18px; }
   .hot-num { min-width: 70px; font-size: 21px; }
 }
 
