@@ -206,19 +206,6 @@ html[lang="en"] .i18n-unit { display: none; }
 .btn-ghost { border-color: transparent; color: var(--ink-soft); }
 
 /* ---------- 三大需求分区（Calm 式） ---------- */
-.needs-nav {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-  padding: 4px 0 44px; border-bottom: 1px solid var(--line);
-}
-.needs-nav a {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  padding: 16px 10px; font-size: 15px; letter-spacing: 0.1em; color: var(--ink-soft);
-  background: rgba(255,255,255,0.42); border: 1px solid var(--line); border-radius: 5px;
-  transition: all 0.35s ease;
-}
-.needs-nav a:hover { border-color: var(--green); color: var(--green-deep); background: var(--green-soft); transform: translateY(-2px); }
-.needs-ico { font-size: 20px; color: var(--green); line-height: 1; }
-
 .need-block { padding: 52px 0 4px; scroll-margin-top: 20px; }
 .need-head { display: flex; gap: 16px; align-items: baseline; margin-bottom: 22px; }
 .need-no {
@@ -253,12 +240,29 @@ html[lang="en"] .i18n-unit { display: none; }
 .checkin-reply { margin: 20px 0 0; font-size: 15px; line-height: 1.9; color: var(--ink-soft); }
 
 /* ---------- room nav ---------- */
-.room-nav {
-  display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 28px;
-  padding: 30px 0 34px; border-bottom: 1px solid var(--line); margin-top: 46px;
+.room-nav-wrap {
+  margin-top: 46px; padding: 26px 0 30px;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
 }
-.room-nav a { font-size: 14px; letter-spacing: 0.12em; color: var(--ink-soft); padding: 4px 2px; border-bottom: 1px solid transparent; transition: all 0.5s ease; }
-.room-nav a:hover { border-bottom-color: var(--ochre); color: var(--ochre); }
+.room-nav-lead {
+  margin: 0 0 20px; text-align: center; font-size: 15px;
+  letter-spacing: 0.1em; color: var(--ink-soft);
+}
+.room-nav {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 14px;
+}
+.room-nav a {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 14px; letter-spacing: 0.1em; color: var(--ink-soft);
+  padding: 7px 15px; border: 1px solid var(--line); border-radius: 999px;
+  background: rgba(255,255,255,0.42); transition: all 0.35s ease;
+}
+.room-nav a:hover { border-color: var(--green); color: var(--green-deep); background: var(--green-soft); transform: translateY(-2px); }
+.room-nav-no {
+  font-family: var(--sans); font-size: 11px; line-height: 1; color: var(--green);
+  border: 1px solid var(--green); border-radius: 50%;
+  width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center;
+}
 
 /* ---------- block / room ---------- */
 .block { padding: 52px 0 8px; scroll-margin-top: 24px; }
@@ -561,7 +565,6 @@ html[lang="en"] .nature-btn { letter-spacing: 0.01em; font-size: 12.5px; padding
   .hero-body { margin: -18px 12px 0; padding: 34px 20px 30px; }
   .scape-grid { grid-template-columns: repeat(3, 1fr); }
   .quick-grid { grid-template-columns: repeat(2, 1fr); }
-  .needs-nav { grid-template-columns: 1fr; }
   .need-cards { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {

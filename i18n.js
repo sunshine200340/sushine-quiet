@@ -39,7 +39,7 @@
     "分区导航": "Section navigation",
     "Language / 语言": "Language / 语言",
     "开场": "Opening",
-    "按需要选择": "Choose by need",
+    "不管哪种心情，这四件事随便挑一件": "Whatever you're feeling, pick any one of these four",
     "此刻的心情": "How you feel now",
     "选择此刻的心情": "Choose how you feel now",
     "解压方式": "Ways to unwind",

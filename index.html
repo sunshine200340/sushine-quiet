@@ -18,7 +18,7 @@
 <meta name="twitter:description" content="一个不用注册就能喘口气的地方。进站就有大自然的声音，听听声音风景，慢慢变好。">
 <meta name="twitter:image" content="https://www.sushine.xyz/og-share.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237f9c86'/%3E%3Ctext x='32' y='44' font-size='30' font-family='serif' text-anchor='middle' fill='%23fff'%3E%E6%85%A2%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=20261116j">
+<link rel="stylesheet" href="style.css?v=20261116k">
 </head>
 <body>
 <div class="paper paper--home">
@@ -73,12 +73,6 @@
     </div>
 
     <!-- ============ 三大需求分区（Calm: Stress less / Sleep more / Live mindfully） ============ -->
-    <div class="needs-nav" id="needs" aria-label="按需要选择">
-      <a href="#feelbetter"><span class="needs-ico" aria-hidden="true">◌</span><span>少点慌</span></a>
-      <a href="#sleep"><span class="needs-ico" aria-hidden="true">☾</span><span>睡得着</span></a>
-      <a href="#mindful"><span class="needs-ico" aria-hidden="true">✎</span><span>慢慢活</span></a>
-    </div>
-
     <section class="need-block" id="feelbetter">
       <div class="need-head">
         <span class="need-no">01</span>
@@ -138,12 +132,15 @@
     </section>
 
     <!-- ============ 解压方式导航 ============ -->
-    <nav class="room-nav" aria-label="解压方式">
-      <a href="#scene">看看空境</a>
-      <a href="#release">撒撒气</a>
-      <a href="#breathe">做回呼吸</a>
-      <a href="#write">写下来放下</a>
-    </nav>
+    <div class="room-nav-wrap">
+      <p class="room-nav-lead">不管哪种心情，这四件事随便挑一件</p>
+      <nav class="room-nav" aria-label="解压方式">
+        <a href="#scene"><span class="room-nav-no" aria-hidden="true">01</span><span>看看空境</span></a>
+        <a href="#release"><span class="room-nav-no" aria-hidden="true">02</span><span>撒撒气</span></a>
+        <a href="#breathe"><span class="room-nav-no" aria-hidden="true">03</span><span>做回呼吸</span></a>
+        <a href="#write"><span class="room-nav-no" aria-hidden="true">04</span><span>写下来放下</span></a>
+      </nav>
+    </div>
 
     <!-- ============ 空境：虚拟自然 ============ -->
     <section id="scene" class="block room">
@@ -496,7 +493,7 @@
   </div>
 </div>
 
-<script src="i18n.js?v=20261116j" defer></script>
-<script src="quiet.js?v=20261116j" defer></script>
+<script src="i18n.js?v=20261116k" defer></script>
+<script src="quiet.js?v=20261116k" defer></script>
 </body>
 </html>
