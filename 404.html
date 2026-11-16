@@ -8,8 +8,13 @@
 </head>
 <body>
 <div class="paper">
-  <header class="masthead">
+  <header class="topbar">
     <div class="brand"><span class="brand-name">别慌</span><span class="brand-sub">一个不用慌的角落</span></div>
+    <div class="lang-switch" role="group" aria-label="Language / 语言">
+      <button type="button" class="lang-btn is-active" data-lang="zh" aria-pressed="true">中</button>
+      <span class="lang-sep" aria-hidden="true">/</span>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+    </div>
   </header>
   <section class="hero">
     <p class="hero-kicker">慌啥子嘛</p>
@@ -18,5 +23,6 @@
   </section>
   <p class="foot-line" style="margin-top:40px"><a href="/">回到那个角落</a></p>
 </div>
+<script src="i18n.js" defer></script>
 </body>
 </html>

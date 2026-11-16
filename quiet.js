@@ -7,9 +7,14 @@
 
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $ = function (id) { return document.getElementById(id); };
+  /* 翻译入口：i18n.js 未就绪时回退为原文 */
+  var T = function (s) { return (window.I18N && window.I18N.t) ? window.I18N.t(s) : s; };
+  var isEn = function () { return !!(window.I18N && window.I18N.lang === 'en'); };
 
   /* ---------- 日期 ---------- */
   var CN = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+  var EN_MONTH = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var EN_SEASON = ['Winter', 'Winter', 'Spring', 'Spring', 'Spring', 'Summer', 'Summer', 'Summer', 'Autumn', 'Autumn', 'Autumn', 'Winter'];
   function cn(n) {
     if (n <= 10) return CN[n];
     if (n < 20) return '十' + CN[n - 10];
@@ -26,8 +31,13 @@
     return '秋';
   }
   var now = new Date();
-  $('today').textContent = season(now.getMonth() + 1, now.getDate()) +
-    ' · ' + cn(now.getMonth() + 1) + '月' + cn(now.getDate()) + '日';
+  function renderDate() {
+    var m = now.getMonth() + 1, d = now.getDate();
+    $('today').textContent = isEn()
+      ? EN_SEASON[now.getMonth()] + ' · ' + EN_MONTH[now.getMonth()] + ' ' + d
+      : season(m, d) + ' · ' + cn(m) + '月' + cn(d) + '日';
+  }
+  renderDate();
 
   /* ---------- 情绪签到 ---------- */
   var REPLIES = {
@@ -39,12 +49,17 @@
   };
   var moodBtns = document.querySelectorAll('.mood');
   var reply = $('checkinReply');
+  var currentMood = null;
+  function showReply(mood) {
+    reply.textContent = T(REPLIES[mood] || '');
+    reply.hidden = false;
+  }
   Array.prototype.forEach.call(moodBtns, function (btn) {
     btn.addEventListener('click', function () {
       Array.prototype.forEach.call(moodBtns, function (b) { b.classList.remove('is-active'); });
       btn.classList.add('is-active');
-      reply.textContent = REPLIES[btn.getAttribute('data-mood')] || '';
-      reply.hidden = false;
+      currentMood = btn.getAttribute('data-mood');
+      showReply(currentMood);
     });
   });
 
@@ -56,14 +71,15 @@
     dusk: '太阳下班了，月亮快上来',
     night: '夜了，安静会儿'
   };
+  var currentPhase = 'day';
   var phaseBtns = document.querySelectorAll('.phase-btn');
   Array.prototype.forEach.call(phaseBtns, function (btn) {
     btn.addEventListener('click', function () {
       Array.prototype.forEach.call(phaseBtns, function (b) { b.classList.remove('is-active'); });
       btn.classList.add('is-active');
-      var phase = btn.getAttribute('data-phase');
-      sceneFrame.setAttribute('data-phase', phase);
-      sceneCaption.textContent = CAPTIONS[phase] || '';
+      currentPhase = btn.getAttribute('data-phase');
+      sceneFrame.setAttribute('data-phase', currentPhase);
+      sceneCaption.textContent = T(CAPTIONS[currentPhase] || '');
     });
   });
 
@@ -120,9 +136,9 @@
   soundBtn.addEventListener('click', function () {
     var on = soundBtn.getAttribute('aria-pressed') === 'true';
     if (on) {
-      stopRain(); soundBtn.setAttribute('aria-pressed', 'false'); soundLabel.textContent = '听会儿雨声';
+      stopRain(); soundBtn.setAttribute('aria-pressed', 'false'); soundLabel.textContent = T('听会儿雨声');
     } else {
-      if (startRain()) { soundBtn.setAttribute('aria-pressed', 'true'); soundLabel.textContent = '关掉雨声'; }
+      if (startRain()) { soundBtn.setAttribute('aria-pressed', 'true'); soundLabel.textContent = T('关掉雨声'); }
     }
   });
 
@@ -219,7 +235,7 @@
       b.style.width = size + 'px'; b.style.height = size + 'px';
       b.style.left = (8 + Math.random() * (w - size - 24)) + 'px';
       b.style.top = (10 + Math.random() * (h - size - 20)) + 'px';
-      b.setAttribute('aria-label', '戳破泡泡');
+      b.setAttribute('aria-label', T('戳破泡泡'));
       (function (el) {
         el.addEventListener('click', function () {
           if (el.classList.contains('pop')) return;
@@ -246,33 +262,36 @@
 
   /* ---------- 呼吸 ---------- */
   var breathWord = $('breathWord');
+  function breathLabel() {
+    if (reduced) return T('按自己的节奏');
+    var p = ((Date.now() - t0) % 12000) / 1000;
+    return p < 4 ? T('慢慢吸') : (p < 6 ? T('停一下') : T('慢慢呼'));
+  }
+  var t0 = Date.now();
   if (!reduced) {
-    var t0 = Date.now();
-    window.setInterval(function () {
-      var p = ((Date.now() - t0) % 12000) / 1000;
-      breathWord.textContent = p < 4 ? '慢慢吸' : (p < 6 ? '停一下' : '慢慢呼');
-    }, 200);
+    window.setInterval(function () { breathWord.textContent = breathLabel(); }, 200);
   } else {
-    breathWord.textContent = '按自己的节奏';
+    breathWord.textContent = breathLabel();
   }
 
   var timerBtn = $('timerBtn');
   var timerText = $('timerText');
   var timerEnd = $('timerEnd');
   var timerId = null, left = 0;
+  function timerIdleLabel() { return timerEnd.hidden ? T('给我三分钟') : T('再来三分钟'); }
   timerBtn.addEventListener('click', function () {
     if (timerId !== null) {
       window.clearInterval(timerId); timerId = null;
-      timerBtn.textContent = '给我三分钟'; timerText.textContent = '';
+      timerBtn.textContent = T('给我三分钟'); timerText.textContent = '';
       return;
     }
-    left = 180; timerEnd.hidden = true; timerBtn.textContent = '先到这儿';
+    left = 180; timerEnd.hidden = true; timerBtn.textContent = T('先到这儿');
     function tick() {
       var mm = Math.floor(left / 60), ss = left % 60;
       timerText.textContent = (mm < 10 ? '0' : '') + mm + ':' + (ss < 10 ? '0' : '') + ss;
       if (left <= 0) {
         window.clearInterval(timerId); timerId = null; timerText.textContent = '';
-        timerBtn.textContent = '再来三分钟'; timerEnd.hidden = false; return;
+        timerBtn.textContent = T('再来三分钟'); timerEnd.hidden = false; return;
       }
       left -= 1;
     }
@@ -317,11 +336,27 @@
     smallList.innerHTML = '';
     for (var i = 0; i < 3; i++) {
       var li = document.createElement('li');
-      li.textContent = SMALL[(smallStart + i * 3) % SMALL.length];
+      li.textContent = T(SMALL[(smallStart + i * 3) % SMALL.length]);
       smallList.appendChild(li);
     }
   }
   smallStart = (now.getFullYear() * 37 + (now.getMonth() + 1) * 11 + now.getDate() * 3) % SMALL.length;
   renderSmall();
   $('moreSmall').addEventListener('click', function () { smallStart = (smallStart + 3) % SMALL.length; renderSmall(); });
+
+  /* ---------- 语言切换：重渲染所有动态文案 ---------- */
+  if (window.I18N && window.I18N.on) {
+    window.I18N.on(function () {
+      renderDate();
+      if (currentMood) showReply(currentMood);
+      sceneCaption.textContent = T(CAPTIONS[currentPhase] || '');
+      soundLabel.textContent = soundBtn.getAttribute('aria-pressed') === 'true' ? T('关掉雨声') : T('听会儿雨声');
+      breathWord.textContent = breathLabel();
+      if (timerId === null) timerBtn.textContent = timerIdleLabel();
+      if (bubbleArea.children.length) {
+        Array.prototype.forEach.call(bubbleArea.children, function (el) { el.setAttribute('aria-label', T('戳破泡泡')); });
+      }
+      renderSmall();
+    });
+  }
 })();

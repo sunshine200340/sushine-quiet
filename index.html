@@ -14,23 +14,92 @@
 <body>
 <div class="paper">
 
-  <header class="masthead">
+  <!-- ============ 顶栏（Calm 式：品牌 + 分区导航 + 免费入口） ============ -->
+  <header class="topbar">
     <div class="brand">
       <span class="brand-name">别慌</span>
       <span class="brand-sub">一个不用慌的角落</span>
+    </div>
+    <nav class="topnav" aria-label="分区导航">
+      <a href="#feelbetter">少点慌</a>
+      <a href="#sleep">睡得着</a>
+      <a href="#mindful">慢慢活</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+    <a class="topbar-cta" href="#checkin">现在开始 <span aria-hidden="true">↗</span></a>
+    <div class="lang-switch" role="group" aria-label="Language / 语言">
+      <button type="button" class="lang-btn is-active" data-lang="zh" aria-pressed="true">中</button>
+      <span class="lang-sep" aria-hidden="true">/</span>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
     </div>
     <div class="today" id="today">&nbsp;</div>
   </header>
 
   <main>
 
-    <!-- ============ HERO：情绪共鸣钩子 ============ -->
+    <!-- ============ HERO：情绪共鸣钩子 + 免费行动号召 ============ -->
     <section class="hero" aria-label="开场">
       <p class="hero-kicker" id="heroKicker">慌啥子嘛</p>
       <h1 class="hero-title">别慌，<em>慢慢来。</em></h1>
       <p class="hero-line">你不是一个人着急。</p>
       <p class="hero-sub">这里不用解决什么，也不用想明白什么。<br>先喘口气，剩下的，等喘匀了再说。</p>
-      <p class="hero-footnote">一个纯前端的放松角落。不测、不记、不上传。</p>
+      <div class="hero-actions">
+        <a class="btn btn-strong" href="#checkin">从这里开始 <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="#feelbetter">看看能做什么 <span aria-hidden="true">↓</span></a>
+      </div>
+      <p class="hero-footnote">完全免费 · 不用注册 · 不测不记不上传</p>
+    </section>
+
+    <!-- ============ 三大需求分区（Calm: Stress less / Sleep more / Live mindfully） ============ -->
+    <div class="needs-nav" id="needs" aria-label="按需要选择">
+      <a href="#feelbetter"><span class="needs-ico" aria-hidden="true">◌</span><span>少点慌</span></a>
+      <a href="#sleep"><span class="needs-ico" aria-hidden="true">☾</span><span>睡得着</span></a>
+      <a href="#mindful"><span class="needs-ico" aria-hidden="true">✎</span><span>慢慢活</span></a>
+    </div>
+
+    <section class="need-block" id="feelbetter">
+      <div class="need-head">
+        <span class="need-no">01</span>
+        <div>
+          <h2>少点慌</h2>
+          <p class="need-lead">心里发紧、坐不住的那几分钟，先别急着想通。有地方可以先把那口气撒出来。</p>
+        </div>
+      </div>
+      <div class="need-cards">
+        <a class="need-card" href="#checkin"><strong>说说此刻</strong><span>点一下心情，先被接住</span></a>
+        <a class="need-card" href="#release"><strong>撒撒气</strong><span>摔瓶子、戳泡泡、打不倒翁</span></a>
+        <a class="need-card" href="#breathe"><strong>做回呼吸</strong><span>跟着圆圈，慢下来</span></a>
+      </div>
+    </section>
+
+    <section class="need-block" id="sleep">
+      <div class="need-head">
+        <span class="need-no">02</span>
+        <div>
+          <h2>睡得着</h2>
+          <p class="need-lead">夜里脑子停不下来的时候，换个天色，听会儿雨声，什么都不用想。</p>
+        </div>
+      </div>
+      <div class="need-cards">
+        <a class="need-card" href="#scene"><strong>看看空境</strong><span>白天 / 黄昏 / 夜里，慢慢看</span></a>
+        <a class="need-card" href="#scene"><strong>听会儿雨声</strong><span>浏览器当场合成，不加载音频</span></a>
+        <a class="need-card" href="#breathe"><strong>三分钟呼吸</strong><span>不用坚持，随时能停</span></a>
+      </div>
+    </section>
+
+    <section class="need-block" id="mindful">
+      <div class="need-head">
+        <span class="need-no">03</span>
+        <div>
+          <h2>慢慢活</h2>
+          <p class="need-lead">想得多、心里乱的时候，写一句想放下的，让它散在风里；或者，就做一件很小的事。</p>
+        </div>
+      </div>
+      <div class="need-cards">
+        <a class="need-card" href="#write"><strong>写在风里</strong><span>即焚，不留底</span></a>
+        <a class="need-card" href="#small"><strong>此刻的小事</strong><span>几件可以试试的事</span></a>
+        <a class="need-card" href="#help"><strong>不想一个人待着</strong><span>那头有人守着</span></a>
+      </div>
     </section>
 
     <!-- ============ 情绪签到 ============ -->
@@ -154,7 +223,6 @@
       </div>
 
       <div class="game-stage" id="gameStage">
-        <!-- 摔酒瓶 -->
         <div class="game-panel is-active" data-panel="bottle">
           <p class="game-tip">点一下酒瓶，让它碎在这儿。</p>
           <div class="bottle-area" id="bottleArea">
@@ -168,17 +236,15 @@
             </button>
             <div class="shards" id="shards" aria-hidden="true"></div>
           </div>
-          <p class="game-count">已经摔了 <strong id="bottleCount">0</strong> 个 · <button type="button" class="link-btn" id="bottleReset">换个新的</button></p>
+          <p class="game-count"><span data-i18n="已经摔了">已经摔了</span> <strong id="bottleCount">0</strong> <span data-i18n="个" class="i18n-unit">个</span> · <button type="button" class="link-btn" id="bottleReset" data-i18n="换个新的">换个新的</button></p>
         </div>
 
-        <!-- 戳泡泡 -->
         <div class="game-panel" data-panel="bubble">
           <p class="game-tip">戳破它们，一个也不留。</p>
           <div class="bubble-area" id="bubbleArea" aria-label="点击戳破泡泡"></div>
-          <p class="game-count">还剩 <strong id="bubbleCount">0</strong> 个 · <button type="button" class="link-btn" id="bubbleReset">再来一堆</button></p>
+          <p class="game-count"><span data-i18n="还剩">还剩</span> <strong id="bubbleCount">0</strong> <span data-i18n="个" class="i18n-unit">个</span> · <button type="button" class="link-btn" id="bubbleReset" data-i18n="再来一堆">再来一堆</button></p>
         </div>
 
-        <!-- 打木偶 -->
         <div class="game-panel" data-panel="doll">
           <p class="game-tip">这是个不倒翁，打不坏，随便来。</p>
           <div class="doll-area" id="dollArea">
@@ -246,7 +312,7 @@
       </p>
     </section>
 
-    <!-- ============ 此刻可做的小事 ============ -->
+    <!-- ============ 此刻能做的小事 ============ -->
     <section id="small" class="block">
       <div class="room-head">
         <span class="room-no">05</span>
@@ -257,6 +323,19 @@
       </div>
       <ul id="smallList" class="small-list"></ul>
       <button type="button" class="btn btn-quiet" id="moreSmall">换几件</button>
+    </section>
+
+    <!-- ============ 数据说明（Calm 式社会证明的合规替代） ============ -->
+    <section class="numbers" id="numbers">
+      <h2>这一页的「数据」</h2>
+      <p>别的地方会告诉你有多少人用、多少五星。这里没有账号，所以数不出来。能确定的是下面这些：</p>
+      <div class="number-grid">
+        <div class="number-cell"><strong>0</strong><span>账号 / 登录</span></div>
+        <div class="number-cell"><strong>0</strong><span>Cookie / 统计</span></div>
+        <div class="number-cell"><strong>0</strong><span>主动网络请求</span></div>
+        <div class="number-cell"><strong>0</strong><span>广告 / 付费墙</span></div>
+      </div>
+      <p class="numbers-note">这不是自我表扬，是这一页的设计约束：服务端用 CSP 禁止了本页主动发起网络请求，你写下的字只留在当前页面内存里。</p>
     </section>
 
     <!-- ============ 如果不想一个人待着 ============ -->
@@ -295,36 +374,66 @@
       <p class="support-note">合作来信：qiangda68@163.com。我们只接与「放松、好睡眠、情绪健康」相关、且不夸大功效的合作。</p>
     </section>
 
+    <!-- ============ 分类问答（Calm 式 FAQ，把边界讲清楚） ============ -->
+    <section class="faq" id="faq">
+      <h2>你可能想问的</h2>
+
+      <div class="faq-group">
+        <h3>关于这一页</h3>
+        <details>
+          <summary>这里是什么？</summary>
+          <div class="faq-a">一个纯静态的中文放松页面：一片虚拟的自然空境、几个虚拟发泄小游戏、一段呼吸节奏、一句即焚的书写，还有几件可以做的小事。它借用了当下流行的「别慌、慢慢来」这一情绪母题，但所有文案、画面与代码均为原创。</div>
+        </details>
+        <details>
+          <summary>它和那首歌有关系吗？</summary>
+          <div class="faq-a">没有。本页未使用任何歌曲的歌词、旋律、录音或人物形象。「慌啥子嘛」是川渝地区一句通用的日常口语，这里只作为「别着急」的俗语引用，不指向任何具体音乐作品，也不构成对其内容的复制或商业使用。</div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h3>关于隐私</h3>
+        <details>
+          <summary>我写下的字会被保存吗？</summary>
+          <div class="faq-a">不会。它只在这一个页面的内存里，不会上传、不会被保存、不经过任何服务器；刷新或关掉页面，就没有了。</div>
+        </details>
+        <details>
+          <summary>真的没有统计和 Cookie 吗？</summary>
+          <div class="faq-a">没有账号、没有表单提交、没有评论、没有上传、没有 Cookie、没有第三方统计。游戏互动与书写只存在于当前页面内存；声音由浏览器当场合成，不加载任何音频文件。服务端设置了 CSP，禁止本页主动发起网络请求。页面中的外部链接需要你主动点击才会打开。</div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h3>关于边界</h3>
+        <details>
+          <summary>这里提供心理咨询或治疗吗？</summary>
+          <div class="faq-a">不提供。这里不是医疗机构，也不是心理咨询机构，不提供诊断、治疗或咨询，不宣称缓解、改善任何疾病与症状。如果困扰持续，请联系专业人士或就近就医。</div>
+        </details>
+        <details>
+          <summary>有没有宗教内容？</summary>
+          <div class="faq-a">没有。这里不是宗教场所，也不是宗教团体，不提供任何互联网宗教信息服务。页面不含教义教规、宗教知识、宗教活动或仪式，不设祈愿、抽签、占卜、命理、宜忌，也不以任何名义募捐。</div>
+        </details>
+        <details>
+          <summary>会给我算命、抽签、看运势吗？</summary>
+          <div class="faq-a">不会。不做运势、签文、算命与黄历宜忌。当天那句旧诗若出现，也只是依日期呈现的文字，不预测什么。</div>
+        </details>
+      </div>
+
+      <div class="faq-group">
+        <h3>关于版权与备案</h3>
+        <details>
+          <summary>诗文和画面有版权吗？</summary>
+          <div class="faq-a">所引诗文均出自公有领域古籍并注明出处；其余文案、画面、图形与代码为原创。</div>
+        </details>
+        <details>
+          <summary>备案情况如何？</summary>
+          <div class="faq-a">本站托管于境外 CDN。若后续面向中国大陆公众长期提供互联网信息服务或开展经营性活动，应按规定办理 ICP 备案及相关许可。</div>
+        </details>
+      </div>
+    </section>
+
   </main>
 
   <footer class="footer">
-    <details class="about">
-      <summary>关于这一页，以及它的边界</summary>
-      <div class="about-body">
-        <p><strong>这里是什么</strong><br>
-        一个纯静态的中文放松页面：一片虚拟的自然空境、几个虚拟发泄小游戏、一段呼吸节奏、一句即焚的书写，还有几件可以不做的小事。它借用了当下流行的「别慌、慢慢来」这一情绪母题，但所有文案、画面与代码均为原创。</p>
-
-        <p><strong>与歌曲无关</strong></p>
-        <p>本页未使用任何歌曲的歌词、旋律、录音或人物形象。「慌啥子嘛」是川渝地区一句通用的日常口语，这里只作为「别着急」的俗语引用，不指向任何具体音乐作品，也不构成对其内容的复制或商业使用。</p>
-
-        <p><strong>这里不是什么</strong></p>
-        <ul>
-          <li>不是宗教场所，也不是宗教团体，不提供任何互联网宗教信息服务。页面不含教义教规、宗教知识、宗教活动或仪式，不设祈愿、抽签、占卜、命理、宜忌，也不以任何名义募捐。依据《互联网宗教信息服务管理办法》第十五至十九条、《宗教事务条例》第四十七条。</li>
-          <li>不是医疗机构，也不是心理咨询机构，不提供诊断、治疗或咨询，不宣称缓解、改善任何疾病与症状。依据《中华人民共和国精神卫生法》。</li>
-          <li>不做运势、签文、算命与黄历宜忌。当天那句旧诗依日期呈现，只是文字。</li>
-        </ul>
-
-        <p><strong>关于你的信息</strong><br>
-        没有账号、没有表单提交、没有评论、没有上传、没有 Cookie、没有第三方统计。书写内容与游戏互动只存在于当前页面内存；声音由浏览器当场合成，不加载任何音频文件。服务端设置了 CSP，禁止本页主动发起网络请求。遵循《中华人民共和国个人信息保护法》的最小必要原则。页面中的外部链接需你主动点击才会打开。</p>
-
-        <p><strong>内容与版权</strong><br>
-        所引诗文均出自公有领域古籍并注明出处；其余文案、画面、图形与代码为原创。</p>
-
-        <p><strong>备案</strong><br>
-        本站托管于境外 CDN。若后续面向中国大陆公众长期提供互联网信息服务或开展经营性活动，应按规定办理 ICP 备案及相关许可。</p>
-      </div>
-    </details>
-
     <p class="foot-line">
       <a href="https://sushine.xyz">老杨的主页</a>
       <span class="dot">·</span>
@@ -335,6 +444,7 @@
   </footer>
 
 </div>
+<script src="i18n.js" defer></script>
 <script src="quiet.js" defer></script>
 </body>
 </html>
