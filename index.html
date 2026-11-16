@@ -3,9 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>停云 · 一页安静</title>
-<meta name="description" content="读一句旧诗，停三分钟，写下一句想放下的话。无账号、无统计、无第三方请求。">
-<meta name="theme-color" content="#f7f4ed">
+<title>别慌，慢慢来 · 一个不用慌的角落</title>
+<meta name="description" content="给焦虑、迷茫、疲惫的成年人留的一个泄压阀。看一会儿鸟语花香的空境，摔几个虚拟酒瓶，做三分钟呼吸，写一句想放下的话。无账号、无统计、无第三方请求。">
+<meta name="theme-color" content="#f6f4ee">
+<meta property="og:title" content="别慌，慢慢来 · 一个不用慌的角落">
+<meta property="og:description" content="你不是一个人着急。这里不用解决什么，先喘口气。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237f9c86'/%3E%3Ctext x='32' y='44' font-size='30' font-family='serif' text-anchor='middle' fill='%23fff'%3E%E6%85%A2%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,88 +16,197 @@
 
   <header class="masthead">
     <div class="brand">
-      <span class="brand-name">停云</span>
-      <span class="brand-sub">一页安静</span>
+      <span class="brand-name">别慌</span>
+      <span class="brand-sub">一个不用慌的角落</span>
     </div>
     <div class="today" id="today">&nbsp;</div>
   </header>
 
   <main>
 
-    <section class="intro">
-      <p class="lede">不用解决什么，也不用想明白什么。</p>
-      <p class="lede-sub">这一页只做一件事 —— 让你慢一点。</p>
+    <!-- ============ HERO：情绪共鸣钩子 ============ -->
+    <section class="hero" aria-label="开场">
+      <p class="hero-kicker" id="heroKicker">慌啥子嘛</p>
+      <h1 class="hero-title">别慌，<em>慢慢来。</em></h1>
+      <p class="hero-line">你不是一个人着急。</p>
+      <p class="hero-sub">这里不用解决什么，也不用想明白什么。<br>先喘口气，剩下的，等喘匀了再说。</p>
+      <p class="hero-footnote">一个纯前端的放松角落。不测、不记、不上传。</p>
     </section>
 
-    <section class="scene-block" aria-label="一扇窗与一句旧诗">
-      <div class="window">
-        <svg class="scene" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <!-- ============ 情绪签到 ============ -->
+    <section class="checkin" id="checkin" aria-label="此刻的心情">
+      <p class="checkin-q">这会儿，你有点……</p>
+      <div class="moods" id="moods" role="group" aria-label="选择此刻的心情">
+        <button type="button" class="mood" data-mood="anxious">有点慌</button>
+        <button type="button" class="mood" data-mood="tired">有点累</button>
+        <button type="button" class="mood" data-mood="irritated">有点烦</button>
+        <button type="button" class="mood" data-mood="lost">有点茫然</button>
+        <button type="button" class="mood" data-mood="okay">还好吧</button>
+      </div>
+      <p class="checkin-reply" id="checkinReply" hidden aria-live="polite"></p>
+    </section>
+
+    <!-- ============ 解压方式导航 ============ -->
+    <nav class="room-nav" aria-label="解压方式">
+      <a href="#scene">看看空境</a>
+      <a href="#release">撒撒气</a>
+      <a href="#breathe">做回呼吸</a>
+      <a href="#write">写下来放下</a>
+    </nav>
+
+    <!-- ============ 空境：虚拟自然 ============ -->
+    <section id="scene" class="block room">
+      <div class="room-head">
+        <span class="room-no">01</span>
+        <div>
+          <h2>看看空境</h2>
+          <p class="hint">一片没人的野外，云在走，鸟在飞，花会开。什么都不用做，看看就好。</p>
+        </div>
+      </div>
+
+      <div class="scene-frame" id="sceneFrame" data-phase="day">
+        <svg class="scene" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
           <defs>
-            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#e9ede8"/>
-              <stop offset="62%" stop-color="#f2f0e8"/>
-              <stop offset="100%" stop-color="#f7f4ed"/>
+            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--sky-top)"/>
+              <stop offset="100%" stop-color="var(--sky-bot)"/>
             </linearGradient>
             <linearGradient id="hillNear" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#8fa095"/>
-              <stop offset="100%" stop-color="#b9c3b8"/>
+              <stop offset="0%" stop-color="var(--hill-near-top)"/>
+              <stop offset="100%" stop-color="var(--hill-near-bot)"/>
             </linearGradient>
           </defs>
 
-          <rect width="800" height="300" fill="url(#sky)"/>
+          <rect width="800" height="360" fill="url(#skyGrad)"/>
+          <circle class="sun" cx="640" cy="86" r="30" fill="var(--sun)"/>
 
-          <g class="cloud cloud-a" fill="#ffffff" opacity="0.50">
-            <ellipse cx="150" cy="72" rx="88" ry="13"/>
-            <ellipse cx="205" cy="64" rx="60" ry="11"/>
+          <g class="cloud cloud-a" fill="var(--cloud)" opacity="0.62">
+            <ellipse cx="150" cy="80" rx="92" ry="13"/>
+            <ellipse cx="206" cy="71" rx="62" ry="10"/>
           </g>
-          <g class="cloud cloud-b" fill="#ffffff" opacity="0.34">
-            <ellipse cx="470" cy="48" rx="104" ry="12"/>
-            <ellipse cx="530" cy="41" rx="62" ry="9"/>
-          </g>
-
-          <path d="M0 196 Q 90 142 178 184 T 360 172 T 545 190 T 800 158 L800 300 L0 300 Z" fill="#c6d0c6" opacity="0.62"/>
-          <path d="M0 226 Q 130 176 250 214 T 480 208 T 700 224 T 800 206 L800 300 L0 300 Z" fill="#a8b7a9" opacity="0.52"/>
-          <path d="M0 264 Q 160 232 320 258 T 620 250 T 800 262 L800 300 L0 300 Z" fill="url(#hillNear)" opacity="0.40"/>
-
-          <g class="bamboo" stroke="#40544a" fill="none" opacity="0.13" stroke-linecap="round">
-            <path d="M742 300 Q 730 190 748 96" stroke-width="5"/>
-            <path d="M748 200 Q 700 178 676 148" stroke-width="2"/>
-            <path d="M744 168 Q 786 148 800 128" stroke-width="2"/>
-            <path d="M744 236 Q 706 220 690 200" stroke-width="2"/>
-            <path d="M700 182 Q 680 170 662 172" stroke-width="1.5"/>
-            <path d="M714 190 Q 700 204 682 206" stroke-width="1.5"/>
-            <path d="M776 158 Q 792 148 800 150" stroke-width="1.5"/>
-            <path d="M770 164 Q 786 180 800 178" stroke-width="1.5"/>
+          <g class="cloud cloud-b" fill="var(--cloud)" opacity="0.42">
+            <ellipse cx="480" cy="54" rx="108" ry="12"/>
+            <ellipse cx="542" cy="47" rx="64" ry="9"/>
           </g>
 
-          <g stroke="#7d8479" opacity="0.10" stroke-width="1">
-            <line x1="133" y1="0" x2="133" y2="300"/>
-            <line x1="267" y1="0" x2="267" y2="300"/>
-            <line x1="400" y1="0" x2="400" y2="300"/>
-            <line x1="533" y1="0" x2="533" y2="300"/>
-            <line x1="667" y1="0" x2="667" y2="300"/>
-            <line x1="0" y1="150" x2="800" y2="150"/>
+          <g class="birds" fill="none" stroke="var(--bird)" stroke-width="2" stroke-linecap="round" opacity="0.75">
+            <path d="M300 118 q 10 -9 20 0 q 10 -9 20 0"/>
+            <path class="bird-2" d="M372 96 q 8 -7 16 0 q 8 -7 16 0"/>
+            <path class="bird-3" d="M256 140 q 7 -6 14 0 q 7 -6 14 0"/>
+          </g>
+
+          <path d="M0 232 Q 90 178 178 220 T 360 208 T 545 226 T 800 194 L800 360 L0 360 Z" fill="var(--hill-far)" opacity="0.7"/>
+          <path d="M0 268 Q 130 218 250 256 T 480 250 T 700 266 T 800 248 L800 360 L0 360 Z" fill="var(--hill-mid)" opacity="0.75"/>
+          <path d="M0 312 Q 160 280 320 306 T 620 298 T 800 310 L800 360 L0 360 Z" fill="url(#hillNear)" opacity="0.55"/>
+
+          <g class="flowers" aria-hidden="true">
+            <g class="flower" transform="translate(96 330)">
+              <line x1="0" y1="0" x2="0" y2="18" stroke="var(--stem)" stroke-width="2"/>
+              <circle cx="0" cy="0" r="5" fill="var(--petal)"/><circle cx="0" cy="0" r="2" fill="var(--pollen)"/>
+            </g>
+            <g class="flower" transform="translate(148 340)">
+              <line x1="0" y1="0" x2="0" y2="14" stroke="var(--stem)" stroke-width="2"/>
+              <circle cx="0" cy="0" r="4" fill="var(--petal2)"/><circle cx="0" cy="0" r="1.6" fill="var(--pollen)"/>
+            </g>
+            <g class="flower" transform="translate(690 336)">
+              <line x1="0" y1="0" x2="0" y2="16" stroke="var(--stem)" stroke-width="2"/>
+              <circle cx="0" cy="0" r="5" fill="var(--petal)"/><circle cx="0" cy="0" r="2" fill="var(--pollen)"/>
+            </g>
+            <g class="flower" transform="translate(742 346)">
+              <line x1="0" y1="0" x2="0" y2="12" stroke="var(--stem)" stroke-width="2"/>
+              <circle cx="0" cy="0" r="4" fill="var(--petal2)"/><circle cx="0" cy="0" r="1.6" fill="var(--pollen)"/>
+            </g>
           </g>
         </svg>
-        <div class="window-light" aria-hidden="true"></div>
+        <div class="scene-light" aria-hidden="true"></div>
+        <div class="scene-caption" id="sceneCaption">日头正好，慢慢看</div>
       </div>
 
-      <blockquote class="verse">
-        <p class="verse-text" id="verseText">&nbsp;</p>
-        <p class="verse-from" id="verseFrom">&nbsp;</p>
-      </blockquote>
-      <p class="verse-note">依日期呈现的一句旧诗。不是签，也不预测什么。</p>
+      <div class="scene-actions">
+        <div class="phase-switch" role="group" aria-label="切换天色">
+          <button type="button" class="phase-btn is-active" data-phase="day">白天</button>
+          <button type="button" class="phase-btn" data-phase="dusk">黄昏</button>
+          <button type="button" class="phase-btn" data-phase="night">夜里</button>
+        </div>
+        <button type="button" class="sound-btn" id="soundBtn" aria-pressed="false">
+          <span class="sound-icon" aria-hidden="true">♪</span><span id="soundLabel">听会儿雨声</span>
+        </button>
+      </div>
+      <p class="quiet-note">声音是当场用浏览器合成的，不加载音频文件，也不联网。</p>
     </section>
 
-    <nav class="entries" aria-label="页面内导航">
-      <a href="#breathe">停一停</a>
-      <a href="#letgo">放在这里</a>
-      <a href="#small">此刻可做的小事</a>
-    </nav>
+    <!-- ============ 压力释放馆 ============ -->
+    <section id="release" class="block room">
+      <div class="room-head">
+        <span class="room-no">02</span>
+        <div>
+          <h2>撒撒气</h2>
+          <p class="hint">有些情绪，坐着想是想不掉的。这儿有几个虚拟小游戏，点一点、摔一摔，把那口气先撒出来。</p>
+        </div>
+      </div>
 
-    <section id="breathe" class="block">
-      <h2>停一停</h2>
-      <p class="hint">跟着圆圈慢慢来。不舒服就随时停，按自己的节奏就好。</p>
+      <p class="release-guard">只是虚拟的小游戏。气可以撒在这儿，别带回生活里，也别对着真人。</p>
+
+      <div class="game-tabs" role="tablist" aria-label="选择发泄小游戏">
+        <button type="button" class="game-tab is-active" data-game="bottle" role="tab" aria-selected="true">摔酒瓶</button>
+        <button type="button" class="game-tab" data-game="bubble" role="tab" aria-selected="false">戳泡泡</button>
+        <button type="button" class="game-tab" data-game="doll" role="tab" aria-selected="false">打木偶</button>
+      </div>
+
+      <div class="game-stage" id="gameStage">
+        <!-- 摔酒瓶 -->
+        <div class="game-panel is-active" data-panel="bottle">
+          <p class="game-tip">点一下酒瓶，让它碎在这儿。</p>
+          <div class="bottle-area" id="bottleArea">
+            <button type="button" class="bottle" id="bottleBtn" aria-label="点击摔碎酒瓶">
+              <svg viewBox="0 0 90 170" aria-hidden="true" focusable="false">
+                <path d="M36 8 h18 v26 c0 8 14 18 14 40 v78 c0 8 -6 12 -14 12 h-18 c-8 0 -14 -4 -14 -12 V74 c0 -22 14 -32 14 -40 Z" fill="#8fae94" opacity="0.9"/>
+                <rect x="36" y="4" width="18" height="10" rx="2" fill="#6d8a72"/>
+                <rect x="31" y="92" width="28" height="40" rx="3" fill="#f4efe3" opacity="0.88"/>
+                <path d="M36 108 h18 M36 116 h14" stroke="#8fae94" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <div class="shards" id="shards" aria-hidden="true"></div>
+          </div>
+          <p class="game-count">已经摔了 <strong id="bottleCount">0</strong> 个 · <button type="button" class="link-btn" id="bottleReset">换个新的</button></p>
+        </div>
+
+        <!-- 戳泡泡 -->
+        <div class="game-panel" data-panel="bubble">
+          <p class="game-tip">戳破它们，一个也不留。</p>
+          <div class="bubble-area" id="bubbleArea" aria-label="点击戳破泡泡"></div>
+          <p class="game-count">还剩 <strong id="bubbleCount">0</strong> 个 · <button type="button" class="link-btn" id="bubbleReset">再来一堆</button></p>
+        </div>
+
+        <!-- 打木偶 -->
+        <div class="game-panel" data-panel="doll">
+          <p class="game-tip">这是个不倒翁，打不坏，随便来。</p>
+          <div class="doll-area" id="dollArea">
+            <button type="button" class="doll" id="dollBtn" aria-label="点击击打不倒翁木偶">
+              <svg viewBox="0 0 140 190" aria-hidden="true" focusable="false">
+                <path d="M70 60 c-26 0 -44 20 -44 52 c0 30 18 52 44 52 c26 0 44 -22 44 -52 c0 -32 -18 -52 -44 -52 Z" fill="#d9b98f"/>
+                <circle cx="70" cy="46" r="30" fill="#e6c9a2"/>
+                <circle cx="59" cy="44" r="3" fill="#5c4632"/><circle cx="81" cy="44" r="3" fill="#5c4632"/>
+                <path d="M60 58 q10 8 20 0" fill="none" stroke="#5c4632" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M30 170 h80 l-8 12 h-64 Z" fill="#b08a5e"/>
+              </svg>
+            </button>
+          </div>
+          <p class="game-count">轻轻打，不打疼自己 · <button type="button" class="link-btn" id="dollReset">扶正它</button></p>
+        </div>
+      </div>
+      <p class="quiet-note">音效同样是当场合成的，不会保存你点了什么。</p>
+    </section>
+
+    <!-- ============ 呼吸 ============ -->
+    <section id="breathe" class="block room">
+      <div class="room-head">
+        <span class="room-no">03</span>
+        <div>
+          <h2>做回呼吸</h2>
+          <p class="hint">跟着圆圈慢慢来。不舒服就随时停，按自己的节奏就好。</p>
+        </div>
+      </div>
       <div class="breath-stage">
         <div class="breath-ring" id="breathRing"><span id="breathWord">慢慢吸</span></div>
       </div>
@@ -105,14 +217,20 @@
       <p id="timerEnd" class="end-note" hidden>三分钟过去了。可以走了，也可以再坐一会儿。</p>
     </section>
 
-    <section id="letgo" class="block">
-      <h2>放在这里</h2>
-      <p class="hint">写一句此刻最想放下的话。不必完整，也不必给谁看。</p>
+    <!-- ============ 写在风里 ============ -->
+    <section id="write" class="block room">
+      <div class="room-head">
+        <span class="room-no">04</span>
+        <div>
+          <h2>写在风里</h2>
+          <p class="hint">写一句此刻最想放下的话。不必完整，也不必给谁看。写完，让它散了。</p>
+        </div>
+      </div>
 
       <div id="writeBox" class="write-box">
         <textarea id="note" rows="4" maxlength="500" placeholder="……" aria-label="写一句想放下的话"></textarea>
         <div class="write-actions">
-          <button type="button" id="letGoBtn" class="btn" disabled>放在这里</button>
+          <button type="button" id="letGoBtn" class="btn" disabled>让风带走</button>
         </div>
       </div>
 
@@ -124,17 +242,25 @@
 
       <p class="privacy">
         <strong>关于你写下的字</strong><br>
-        它只在这一个页面的内存里。不会上传、不会被保存、不经过任何服务器；刷新或关掉，就没有了。本页不使用账号、Cookie 或任何统计，服务端也已禁止本页发起网络请求。
+        它只在这一个页面的内存里。不会上传、不会被保存、不经过任何服务器；刷新或关掉，就没有了。本页不使用账号、Cookie 或任何统计，服务端也已禁止本页主动发起网络请求。
       </p>
     </section>
 
+    <!-- ============ 此刻可做的小事 ============ -->
     <section id="small" class="block">
-      <h2>此刻可做的小事</h2>
-      <p class="hint">只是几件可以试试的事，不是建议，也不保证什么。</p>
+      <div class="room-head">
+        <span class="room-no">05</span>
+        <div>
+          <h2>此刻能做的小事</h2>
+          <p class="hint">只是几件可以试试的事，不是建议，也不保证什么。</p>
+        </div>
+      </div>
       <ul id="smallList" class="small-list"></ul>
+      <button type="button" class="btn btn-quiet" id="moreSmall">换几件</button>
     </section>
 
-    <section class="help">
+    <!-- ============ 如果不想一个人待着 ============ -->
+    <section class="help" id="help">
       <h2>如果不想一个人待着</h2>
       <p>这一页帮不上真正难的那些时刻。下面的号码，那头有人守着。</p>
       <ul class="hotlines">
@@ -145,6 +271,30 @@
       <p class="help-note">本站不提供心理咨询、心理治疗或任何医疗建议。若困扰持续，请联系专业人士或就近就医。</p>
     </section>
 
+    <!-- ============ 支持本站（合规变现出口） ============ -->
+    <section class="support" id="support">
+      <h2>如果这里让你喘匀了一口气</h2>
+      <p class="support-lead">这一页一直免费、无广告。如果你想让它继续做下去，或者想走得更远一点，可以从这里挑一样。</p>
+      <div class="support-grid">
+        <a class="support-card" href="https://sushine.xyz/#columns" target="_blank" rel="noopener noreferrer">
+          <span class="support-ico" aria-hidden="true">✎</span>
+          <strong>读点慢东西</strong>
+          <span>老杨的认知专栏 · 小报童</span>
+        </a>
+        <a class="support-card" href="https://sushine.xyz/#columns" target="_blank" rel="noopener noreferrer">
+          <span class="support-ico" aria-hidden="true">◌</span>
+          <strong>找个地方聊</strong>
+          <span>知识星球 · 一起把事推进</span>
+        </a>
+        <a class="support-card" href="mailto:qiangda68@163.com?subject=%E5%90%88%E4%BD%9C%E5%92%A8%E8%AF%A2">
+          <span class="support-ico" aria-hidden="true">✉</span>
+          <strong>谈个合作</strong>
+          <span>品牌 / 好物 / 场地</span>
+        </a>
+      </div>
+      <p class="support-note">合作来信：qiangda68@163.com。我们只接与「放松、好睡眠、情绪健康」相关、且不夸大功效的合作。</p>
+    </section>
+
   </main>
 
   <footer class="footer">
@@ -152,30 +302,35 @@
       <summary>关于这一页，以及它的边界</summary>
       <div class="about-body">
         <p><strong>这里是什么</strong><br>
-        一个纯静态的中文页面：几句公有领域的旧诗、一个三分钟计时、几件可以不做的小事。属于个人非经营性展示，不收费、不募捐、不售卖任何东西。</p>
+        一个纯静态的中文放松页面：一片虚拟的自然空境、几个虚拟发泄小游戏、一段呼吸节奏、一句即焚的书写，还有几件可以不做的小事。它借用了当下流行的「别慌、慢慢来」这一情绪母题，但所有文案、画面与代码均为原创。</p>
+
+        <p><strong>与歌曲无关</strong></p>
+        <p>本页未使用任何歌曲的歌词、旋律、录音或人物形象。「慌啥子嘛」是川渝地区一句通用的日常口语，这里只作为「别着急」的俗语引用，不指向任何具体音乐作品，也不构成对其内容的复制或商业使用。</p>
 
         <p><strong>这里不是什么</strong></p>
         <ul>
-          <li>不是宗教场所，也不是宗教团体，不提供任何互联网宗教信息服务。页面不含教义教规、宗教知识、宗教活动或仪式，不设祈愿、抽签、占卜、命理、宜忌，也不以任何名义募捐或收费。依据《互联网宗教信息服务管理办法》第十五至十九条、《宗教事务条例》第四十七条。</li>
+          <li>不是宗教场所，也不是宗教团体，不提供任何互联网宗教信息服务。页面不含教义教规、宗教知识、宗教活动或仪式，不设祈愿、抽签、占卜、命理、宜忌，也不以任何名义募捐。依据《互联网宗教信息服务管理办法》第十五至十九条、《宗教事务条例》第四十七条。</li>
           <li>不是医疗机构，也不是心理咨询机构，不提供诊断、治疗或咨询，不宣称缓解、改善任何疾病与症状。依据《中华人民共和国精神卫生法》。</li>
-          <li>不做运势、签文、算命与黄历宜忌。那句旧诗依日期呈现，只是文字。</li>
+          <li>不做运势、签文、算命与黄历宜忌。当天那句旧诗依日期呈现，只是文字。</li>
         </ul>
 
         <p><strong>关于你的信息</strong><br>
-        没有账号、没有表单提交、没有评论、没有上传、没有 Cookie、没有第三方统计、没有广告，也不加载任何外部资源。书写内容只存在于当前页面内存；服务端同时设置了 CSP，禁止本页发起任何网络请求。遵循《中华人民共和国个人信息保护法》的最小必要原则。</p>
+        没有账号、没有表单提交、没有评论、没有上传、没有 Cookie、没有第三方统计。书写内容与游戏互动只存在于当前页面内存；声音由浏览器当场合成，不加载任何音频文件。服务端设置了 CSP，禁止本页主动发起网络请求。遵循《中华人民共和国个人信息保护法》的最小必要原则。页面中的外部链接需你主动点击才会打开。</p>
 
         <p><strong>内容与版权</strong><br>
-        所引诗文均出自公有领域古籍并注明出处；页面代码与版式为原创。</p>
+        所引诗文均出自公有领域古籍并注明出处；其余文案、画面、图形与代码为原创。</p>
 
         <p><strong>备案</strong><br>
-        本站托管于境外 CDN。若后续面向中国大陆公众长期提供互联网信息服务，应按规定办理 ICP 备案。</p>
+        本站托管于境外 CDN。若后续面向中国大陆公众长期提供互联网信息服务或开展经营性活动，应按规定办理 ICP 备案及相关许可。</p>
       </div>
     </details>
 
     <p class="foot-line">
-      <a href="https://sushine.xyz">回到老杨的主页</a>
+      <a href="https://sushine.xyz">老杨的主页</a>
       <span class="dot">·</span>
-      <span>纯静态 · 无账号 · 无统计 · 无广告 · 无第三方请求</span>
+      <a href="mailto:qiangda68@163.com">写信给我</a>
+      <span class="dot">·</span>
+      <span>别慌，慢慢来</span>
     </p>
   </footer>
 
