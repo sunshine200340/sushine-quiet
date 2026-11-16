@@ -217,8 +217,10 @@
     /* 支持 / 变现 */
     "如果这里让你喘匀了一口气": "If this helped you catch your breath",
     "这一页一直免费、无广告。如果你想让它继续做下去，或者想走得更远一点，可以从这里挑一样。": "This page will always be free and ad-free. If you'd like to keep it going — or go a little further — pick one of these.",
+    "这一页一直免费、无广告。如果想把这份「慢下来」想得更透，老杨在认知专栏写了更多——可以先免费试读。": "This page is always free and ad-free. If you want to think this idea of slowing down through, Lao Yang wrote more in his thinking column — you can preview it for free first.",
     "读点慢东西": "Read something slow",
     "老杨的认知专栏 · 小报童": "Lao Yang's thinking column · Xiaobaotong",
+    "免费试读 · 老杨的认知专栏": "Free preview · Lao Yang's thinking column",
     "找个地方聊": "Find a place to talk",
     "知识星球 · 一起把事推进": "Knowledge Planet · Make progress together",
     "小报童": "Xiaobot",
