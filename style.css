@@ -451,6 +451,66 @@ html[lang="en"] .nature-btn { letter-spacing: 0.01em; font-size: 12.5px; padding
 .doll.hit { animation: dollhit 0.6s ease-out; }
 @keyframes dollhit { 0% { transform: rotate(0); } 20% { transform: rotate(-16deg); } 45% { transform: rotate(12deg); } 70% { transform: rotate(-6deg); } 100% { transform: rotate(0); } }
 
+/* 撕纸片 */
+.tear-area { height: 210px; display: flex; align-items: center; justify-content: center; }
+.tear-paper {
+  position: relative; width: 150px; height: 190px; padding: 0; cursor: pointer;
+  background: #f7f4ea; border: 1px solid #ded7c4; border-radius: 3px;
+  box-shadow: 0 6px 14px rgba(60,50,30,0.12); overflow: hidden;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.tear-paper:hover { transform: rotate(-2deg) scale(1.03); }
+.tear-word {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 22px; letter-spacing: 0.16em; color: #8a7f66;
+}
+.tear-paper.is-torn .tear-word { opacity: 0; }
+.tear-half {
+  position: absolute; top: 0; width: 50%; height: 100%; pointer-events: none;
+  background: #f7f4ea; border: 1px solid #ded7c4;
+}
+.tear-left { left: 0; border-right: none; transform-origin: 100% 50%; }
+.tear-right { right: 0; border-left: none; transform-origin: 0 50%; opacity: 0; }
+.tear-half::after {
+  content: attr(data-word); position: absolute; top: 50%; width: 150px; text-align: center;
+  transform: translateY(-50%); font-family: var(--serif); font-size: 22px; color: #8a7f66; letter-spacing: 0.16em;
+}
+.tear-left::after { left: 0; }
+.tear-right::after { right: 0; }
+
+/* 揉压力球 */
+.squish-area { height: 210px; display: flex; align-items: center; justify-content: center; }
+.squish-ball {
+  position: relative; width: 140px; height: 140px; padding: 0; cursor: grab; border: none; border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, #f6e4e6, #d9a9ad 55%, #b9828a);
+  box-shadow: inset -10px -14px 24px rgba(120,70,75,0.22), 0 10px 22px rgba(80,50,55,0.16);
+  transition: transform 0.28s cubic-bezier(.2,.8,.3,1); touch-action: none;
+}
+.squish-ball:active { cursor: grabbing; }
+.squish-ball.is-squished { transform: scale(1.14, 0.8); }
+.squish-shine {
+  position: absolute; top: 22px; left: 30px; width: 46px; height: 26px; border-radius: 50%;
+  background: rgba(255,255,255,0.42); transform: rotate(-28deg); pointer-events: none;
+}
+.squish-label {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 26px; color: rgba(110,60,66,0.5); pointer-events: none;
+}
+
+/* 敲鼓 */
+.drum-area { height: 210px; display: flex; align-items: center; justify-content: center; }
+.drum { position: relative; width: 180px; background: none; border: none; padding: 0; cursor: pointer; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.12)); }
+.drum svg { width: 100%; display: block; }
+.drum-stick { transform-origin: 108px 46px; }
+.drum.hit .drum-stick { animation: drumhit 0.4s ease-out; }
+.drum-wave {
+  position: absolute; left: 50%; top: 46%; width: 40px; height: 40px; margin: -20px 0 0 -20px;
+  border: 2px solid var(--ochre); border-radius: 50%; opacity: 0; pointer-events: none;
+}
+.drum.hit .drum-wave { animation: drumwave 0.55s ease-out; }
+@keyframes drumhit { 0% { transform: rotate(0); } 40% { transform: rotate(26deg) translateY(10px); } 100% { transform: rotate(0); } }
+@keyframes drumwave { 0% { transform: scale(0.5); opacity: 0.6; } 100% { transform: scale(3.4); opacity: 0; } }
+
 /* ---------- breathe ---------- */
 .breath-stage { display: flex; justify-content: center; padding: 10px 0 30px; }
 .breath-ring {
@@ -589,7 +649,7 @@ html[lang="en"] .nature-btn { letter-spacing: 0.01em; font-size: 12.5px; padding
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .sun, .cloud-a, .cloud-b, .birds, .bird-2, .bird-3, .flower, .breath-ring, .ink, .doll.hit { animation: none !important; }
+  .sun, .cloud-a, .cloud-b, .birds, .bird-2, .bird-3, .flower, .breath-ring, .ink, .doll.hit, .drum.hit .drum-stick, .drum.hit .drum-wave { animation: none !important; }
   .breath-ring { transform: scale(1); opacity: 1; }
   .write-box { transition: opacity 0.2s ease; }
 }

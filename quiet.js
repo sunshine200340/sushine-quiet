@@ -775,6 +775,82 @@
   });
   $('dollReset').addEventListener('click', function () { dollBtn.classList.remove('hit'); });
 
+  /* 撕纸片 */
+  var tearPaper = $('tearPaper');
+  var tearWord = $('tearWord');
+  var tearLeft = tearPaper.querySelector('.tear-left');
+  var tearRight = tearPaper.querySelector('.tear-right');
+  var tearWords = null;
+  function tearWordList() {
+    if (tearWords) return tearWords;
+    var raw = T('烦心事,加班,催稿,对比,失眠,内耗,deadline,油价,房贷,已读不回');
+    tearWords = String(raw).split(',');
+    return tearWords;
+  }
+  var tearCount = 0;
+  var tearCountEl = $('tearCount');
+  function nextTearWord() {
+    var list = tearWordList();
+    var w = list[Math.floor(Math.random() * list.length)];
+    tearWord.textContent = w;
+    tearLeft.setAttribute('data-word', w);
+    tearRight.setAttribute('data-word', w);
+  }
+  nextTearWord();
+  tearPaper.addEventListener('click', function () {
+    burst(0.24, 2000, 0.16, 'noise');
+    tearCount += 1; tearCountEl.textContent = tearCount;
+    tearPaper.classList.add('is-torn');
+    if (reduced) {
+      window.setTimeout(function () { tearPaper.classList.remove('is-torn'); nextTearWord(); }, 200);
+      return;
+    }
+    tearLeft.animate([
+      { transform: 'translateX(0) rotate(0deg)', opacity: 1 },
+      { transform: 'translateX(-46px) rotate(-24deg)', opacity: 0 }
+    ], { duration: 620, easing: 'cubic-bezier(.2,.7,.3,1)' });
+    tearRight.animate([
+      { transform: 'translateX(0) rotate(0deg)', opacity: 1 },
+      { transform: 'translateX(46px) rotate(24deg)', opacity: 0 }
+    ], { duration: 620, easing: 'cubic-bezier(.2,.7,.3,1)' });
+    window.setTimeout(function () {
+      tearPaper.classList.remove('is-torn');
+      tearLeft.getAnimations().forEach(function (a) { a.cancel(); });
+      tearRight.getAnimations().forEach(function (a) { a.cancel(); });
+      nextTearWord();
+    }, 640);
+  });
+  $('tearReset').addEventListener('click', function () { tearCount = 0; tearCountEl.textContent = '0'; nextTearWord(); });
+
+  /* 揉压力球 */
+  var squishBall = $('squishBall');
+  var squishCount = 0;
+  var squishCountEl = $('squishCount');
+  function squishStart() {
+    squishBall.classList.add('is-squished');
+    squishCount += 1; squishCountEl.textContent = squishCount;
+    burst(0.1, 700, 0.09, 'tone');
+  }
+  function squishEnd() { squishBall.classList.remove('is-squished'); }
+  squishBall.addEventListener('pointerdown', squishStart);
+  squishBall.addEventListener('pointerup', squishEnd);
+  squishBall.addEventListener('pointerleave', squishEnd);
+  squishBall.addEventListener('pointercancel', squishEnd);
+  $('squishReset').addEventListener('click', function () { squishCount = 0; squishCountEl.textContent = '0'; });
+
+  /* 敲鼓 */
+  var drumBtn = $('drumBtn');
+  var drumCount = 0;
+  var drumCountEl = $('drumCount');
+  drumBtn.addEventListener('click', function () {
+    drumBtn.classList.remove('hit');
+    void drumBtn.offsetWidth;
+    drumBtn.classList.add('hit');
+    drumCount += 1; drumCountEl.textContent = drumCount;
+    burst(0.34, 160, 0.26, 'tone');
+  });
+  $('drumReset').addEventListener('click', function () { drumCount = 0; drumCountEl.textContent = '0'; drumBtn.classList.remove('hit'); });
+
   /* ---------- 呼吸 ---------- */
   var breathWord = $('breathWord');
   function breathLabel() {
